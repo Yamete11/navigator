@@ -41,4 +41,13 @@ public interface CityMapper extends GenericDao<City>{
     @Override
     @Delete("DELETE FROM cities WHERE city_id = #{id}")
     void deleteById(Long id);
+
+    @Select("SELECT c.city_id, c.title, c.x, c.y FROM cities c WHERE c.title = #{title}")
+    @Results({
+            @Result(property = "id", column = "city_id"),
+            @Result(property = "title", column = "title"),
+            @Result(property = "x", column = "x"),
+            @Result(property = "y", column = "y")
+    })
+    Optional<City> getByTitle(String title);
 }

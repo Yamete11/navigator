@@ -12,6 +12,10 @@ public class StartLocation {
         this.city = city;
     }
 
+    public StartLocation(City city) {
+        this.city = city;
+    }
+
     public Long getId() {
         return id;
     }

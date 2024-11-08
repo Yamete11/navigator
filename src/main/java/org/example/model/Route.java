@@ -16,6 +16,12 @@ public class Route {
         this.endLocation = endLocation;
     }
 
+    public Route(Double distance, StartLocation startLocation, EndLocation endLocation) {
+        this.distance = distance;
+        this.startLocation = startLocation;
+        this.endLocation = endLocation;
+    }
+
     public Long getId() {
         return id;
     }

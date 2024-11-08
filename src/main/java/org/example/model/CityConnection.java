@@ -17,6 +17,12 @@ public class CityConnection {
         this.secondCity = secondCity;
     }
 
+    public CityConnection(Double distance, City firstCity, City secondCity) {
+        this.distance = distance;
+        this.firstCity = firstCity;
+        this.secondCity = secondCity;
+    }
+
     public Long getId() {
         return id;
     }

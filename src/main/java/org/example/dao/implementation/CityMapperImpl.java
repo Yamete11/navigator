@@ -60,4 +60,13 @@ public class CityMapperImpl implements CityMapper {
             session.commit();
         }
     }
+
+    @Override
+    public Optional<City> getByTitle(String title) {
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            CityMapper cityMapper = session.getMapper(CityMapper.class);
+            return cityMapper.getByTitle(title);
+        }
+    }
+
 }

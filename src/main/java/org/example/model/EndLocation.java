@@ -12,6 +12,10 @@ public class EndLocation {
         this.city = city;
     }
 
+    public EndLocation(City city) {
+        this.city = city;
+    }
+
     public Long getId() {
         return id;
     }
