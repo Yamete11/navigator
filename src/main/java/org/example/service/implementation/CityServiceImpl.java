@@ -41,4 +41,10 @@ public class CityServiceImpl implements CityService {
     public void deleteById(Long id) {
         cityMapper.deleteById(id);
     }
+
+    @Override
+    public Optional<City> getCityByTitle(String title) {
+        return cityMapper.getByTitle(title);
+    }
+
 }

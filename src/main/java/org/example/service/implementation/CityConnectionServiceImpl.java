@@ -1,9 +1,7 @@
 package org.example.service.implementation;
 
 import org.example.dao.CityConnectionMapper;
-import org.example.dao.CityMapper;
 import org.example.dao.implementation.CityConnectionMapperImpl;
-import org.example.dao.implementation.CityMapperImpl;
 import org.example.model.CityConnection;
 import org.example.service.CityConnectionService;
 
@@ -41,5 +39,10 @@ public class CityConnectionServiceImpl implements CityConnectionService {
     @Override
     public void deleteById(Long id) {
         cityConnectionMapper.deleteById(id);
+    }
+
+    @Override
+    public List<CityConnection> getCityConnectionsByCityId(Long id) {
+        return cityConnectionMapper.getCityConnectionsByCityId(id);
     }
 }

@@ -60,4 +60,12 @@ public class CityConnectionMapperImpl implements CityConnectionMapper {
             session.commit();
         }
     }
+
+    @Override
+    public List<CityConnection> getCityConnectionsByCityId(Long id) {
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            CityConnectionMapper cityConnectionMapper = session.getMapper(CityConnectionMapper.class);
+            return cityConnectionMapper.getCityConnectionsByCityId(id);
+        }
+    }
 }

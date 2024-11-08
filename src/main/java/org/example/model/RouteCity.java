@@ -16,6 +16,12 @@ public class RouteCity {
         this.index = index;
     }
 
+    public RouteCity(City city, Route route, Long index) {
+        this.city = city;
+        this.route = route;
+        this.index = index;
+    }
+
     public Long getId() {
         return id;
     }

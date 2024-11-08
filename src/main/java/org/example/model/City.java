@@ -16,6 +16,12 @@ public class City {
         this.y = y;
     }
 
+    public City(String title, Double x, Double y) {
+        this.title = title;
+        this.x = x;
+        this.y = y;
+    }
+
     public Long getId() {
         return id;
     }

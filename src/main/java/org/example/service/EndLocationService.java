@@ -1,4 +1,6 @@
 package org.example.service;
 
-public interface EndLocationService {
+import org.example.model.EndLocation;
+
+public interface EndLocationService extends GenericService<EndLocation> {
 }
