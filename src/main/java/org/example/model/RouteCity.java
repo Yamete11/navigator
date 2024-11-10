@@ -4,7 +4,7 @@ public class RouteCity {
     private Long id;
     private City city;
     private Route route;
-    private Long index;
+    private Long orderIndex;
 
     public RouteCity() {
     }
@@ -13,13 +13,13 @@ public class RouteCity {
         this.id = id;
         this.city = city;
         this.route = route;
-        this.index = index;
+        this.orderIndex = index;
     }
 
     public RouteCity(City city, Route route, Long index) {
         this.city = city;
         this.route = route;
-        this.index = index;
+        this.orderIndex = index;
     }
 
     public Long getId() {
@@ -46,12 +46,12 @@ public class RouteCity {
         this.route = route;
     }
 
-    public Long getIndex() {
-        return index;
+    public Long getOrderIndex() {
+        return orderIndex;
     }
 
-    public void setIndex(Long index) {
-        this.index = index;
+    public void setOrderIndex(Long orderIndex) {
+        this.orderIndex = orderIndex;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class RouteCity {
                 "id=" + id +
                 ", city=" + city +
                 ", route=" + route +
-                ", index=" + index +
+                ", index=" + orderIndex +
                 '}';
     }
 }

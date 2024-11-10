@@ -2,6 +2,7 @@ package org.example.service.implementation;
 
 import org.example.dao.RouteCityMapper;
 import org.example.dao.implementation.RouteCityMapperImpl;
+import org.example.model.City;
 import org.example.model.RouteCity;
 import org.example.service.RouteCityService;
 
@@ -39,5 +40,10 @@ public class RouteCityServiceImpl implements RouteCityService {
     @Override
     public void deleteById(Long id) {
         routeCityMapper.deleteById(id);
+    }
+
+    @Override
+    public List<City> getCitiesByRouteId(Long id) {
+        return routeCityMapper.getCitiesByRouteId(id);
     }
 }
