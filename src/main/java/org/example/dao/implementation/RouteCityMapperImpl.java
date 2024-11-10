@@ -4,6 +4,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.example.config.ConnectionManager;
 import org.example.dao.RouteCityMapper;
+import org.example.model.City;
 import org.example.model.RouteCity;
 
 import java.util.List;
@@ -58,6 +59,14 @@ public class RouteCityMapperImpl implements RouteCityMapper {
             RouteCityMapper routeCityMapper = session.getMapper(RouteCityMapper.class);
             routeCityMapper.deleteById(id);
             session.commit();
+        }
+    }
+
+    @Override
+    public List<City> getCitiesByRouteId(Long routeId) {
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            RouteCityMapper routeCityMapper = session.getMapper(RouteCityMapper.class);
+            return routeCityMapper.getCitiesByRouteId(routeId);
         }
     }
 }
