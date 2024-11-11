@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface StartLocationMapper extends GenericDao<StartLocation> {
 
     @Override
-    @Insert("INSERT INTO start_locations (start_location_id, city_id) VALUES (#{id}, #{city.id})")
+    @Insert("INSERT INTO start_locations (city_id) VALUES (#{city.id})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void create(StartLocation entity);
 

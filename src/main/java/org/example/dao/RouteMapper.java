@@ -14,11 +14,11 @@ public interface RouteMapper extends GenericDao<Route> {
     @Override
     @Insert("INSERT INTO Routes (total_distance, start_location_id, end_location_id) " +
             "VALUES (#{totalDistance}, #{startLocation.id}, #{endLocation.id})")
-    @Options(useGeneratedKeys = true, keyProperty = "routeId")
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     void create(Route entity);
 
     @Override
-    @Select("SELECT r.route_id, r.total_distance, " +
+    @Select("SELECT r.route_id AS id, r.total_distance, " +
             "sl.start_location_id AS start_location_id, sl.city_id AS start_city_id, c1.title AS start_city_title, c1.x AS start_x, c1.y AS start_y, " +
             "el.end_location_id AS end_location_id, el.city_id AS end_city_id, c2.title AS end_city_title, c2.x AS end_x, c2.y AS end_y " +
             "FROM Routes r " +
@@ -28,7 +28,7 @@ public interface RouteMapper extends GenericDao<Route> {
             "JOIN cities c2 ON el.city_id = c2.city_id " +
             "WHERE r.route_id = #{id}")
     @Results({
-            @Result(column = "route_id", property = "routeId"),
+            @Result(column = "id", property = "id"),
             @Result(column = "total_distance", property = "totalDistance"),
             @Result(property = "startLocation.id", column = "start_location_id"),
             @Result(property = "startLocation.city.id", column = "start_city_id"),
@@ -44,7 +44,7 @@ public interface RouteMapper extends GenericDao<Route> {
     Optional<Route> getById(Long id);
 
     @Override
-    @Select("SELECT r.route_id, r.total_distance, " +
+    @Select("SELECT r.route_id AS id, r.total_distance, " +
             "sl.start_location_id AS start_location_id, sl.city_id AS start_city_id, c1.title AS start_city_title, c1.x AS start_x, c1.y AS start_y, " +
             "el.end_location_id AS end_location_id, el.city_id AS end_city_id, c2.title AS end_city_title, c2.x AS end_x, c2.y AS end_y " +
             "FROM Routes r " +
@@ -53,7 +53,7 @@ public interface RouteMapper extends GenericDao<Route> {
             "JOIN end_locations el ON r.end_location_id = el.end_location_id " +
             "JOIN cities c2 ON el.city_id = c2.city_id")
     @Results({
-            @Result(column = "route_id", property = "routeId"),
+            @Result(column = "id", property = "id"),
             @Result(column = "total_distance", property = "totalDistance"),
             @Result(property = "startLocation.id", column = "start_location_id"),
             @Result(property = "startLocation.city.id", column = "start_city_id"),
@@ -71,7 +71,7 @@ public interface RouteMapper extends GenericDao<Route> {
     @Override
     @Update("UPDATE Routes SET total_distance = #{totalDistance}, " +
             "start_location_id = #{startLocation.id}, end_location_id = #{endLocation.id} " +
-            "WHERE route_id = #{routeId}")
+            "WHERE route_id = #{id}")
     void update(Route entity);
 
     @Override

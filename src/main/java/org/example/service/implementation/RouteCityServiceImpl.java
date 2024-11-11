@@ -23,6 +23,11 @@ public class RouteCityServiceImpl implements RouteCityService {
     }
 
     @Override
+    public void createBatch(List<RouteCity> routeCities) {
+        routeCityMapper.createBatch(routeCities);
+    }
+
+    @Override
     public Optional<RouteCity> getById(Long id) {
         return routeCityMapper.getById(id);
     }
@@ -50,5 +55,10 @@ public class RouteCityServiceImpl implements RouteCityService {
     @Override
     public void deleteByCityId(Long id) {
         routeCityMapper.deleteByCityId(id);
+    }
+
+    @Override
+    public void deleteByRouteId(Long id) {
+        routeCityMapper.deleteByRouteId(id);
     }
 }

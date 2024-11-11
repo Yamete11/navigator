@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface EndLocationMapper extends GenericDao<EndLocation> {
 
     @Override
-    @Insert("INSERT INTO end_locations (end_location_id, city_id) VALUES (#{id}, #{city.id})")
+    @Insert("INSERT INTO end_locations (city_id) VALUES (#{city.id})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void create(EndLocation entity);
 

@@ -6,8 +6,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.apache.ibatis.session.Configuration;
-import org.example.dao.CityMapper;
-import org.example.dao.CityConnectionMapper;
+import org.example.dao.*;
 import org.example.model.EndLocation;
 import org.example.model.Route;
 import org.example.model.RouteCity;
@@ -38,10 +37,10 @@ public class ConnectionManager {
 
             configuration.addMapper(CityMapper.class);
             configuration.addMapper(CityConnectionMapper.class);
-            configuration.addMapper(StartLocation.class);
-            configuration.addMapper(EndLocation.class);
-            configuration.addMapper(Route.class);
-            configuration.addMapper(RouteCity.class);
+            configuration.addMapper(StartLocationMapper.class);
+            configuration.addMapper(EndLocationMapper.class);
+            configuration.addMapper(RouteMapper.class);
+            configuration.addMapper(RouteCityMapper.class);
 
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);
         } catch (Exception e) {
