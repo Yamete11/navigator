@@ -13,7 +13,7 @@ public interface EndLocationMapper extends GenericDao<EndLocation> {
     @Override
     @Insert("INSERT INTO end_locations (end_location_id, city_id) VALUES (#{id}, #{city.id})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    EndLocation create(EndLocation entity);
+    void create(EndLocation entity);
 
     @Override
     @Select("SELECT el.end_location_id, c.city_id, c.title, c.x, c.y " +
@@ -49,4 +49,7 @@ public interface EndLocationMapper extends GenericDao<EndLocation> {
     @Override
     @Delete("DELETE FROM end_locations WHERE end_location_id = #{id}")
     void deleteById(Long id);
+
+    @Delete("DELETE FROM end_locations WHERE city_id = #{id}")
+    void deleteByCityId(Long id);
 }

@@ -18,12 +18,11 @@ public class EndLocationMapperImpl implements EndLocationMapper {
     }
 
     @Override
-    public EndLocation create(EndLocation entity) {
+    public void create(EndLocation entity) {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             EndLocationMapper endLocationMapper = session.getMapper(EndLocationMapper.class);
             endLocationMapper.create(entity);
             session.commit();
-            return entity;
         }
     }
 
@@ -57,6 +56,15 @@ public class EndLocationMapperImpl implements EndLocationMapper {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             EndLocationMapper endLocationMapper = session.getMapper(EndLocationMapper.class);
             endLocationMapper.deleteById(id);
+            session.commit();
+        }
+    }
+
+    @Override
+    public void deleteByCityId(Long id) {
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            EndLocationMapper endLocationMapper = session.getMapper(EndLocationMapper.class);
+            endLocationMapper.deleteByCityId(id);
             session.commit();
         }
     }

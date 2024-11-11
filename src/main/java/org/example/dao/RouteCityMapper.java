@@ -13,7 +13,7 @@ public interface RouteCityMapper extends GenericDao<RouteCity> {
     @Override
     @Insert("INSERT INTO route_cities (city_id, route_id, order_index) VALUES (#{city.id}, #{route.id}, #{orderIndex})")
     @Options(useGeneratedKeys = true, keyProperty = "routeCitiesId")
-    RouteCity create(RouteCity entity);
+    void create(RouteCity entity);
 
     @Override
     @Select("SELECT rc.route_cities_id, " +
@@ -63,6 +63,9 @@ public interface RouteCityMapper extends GenericDao<RouteCity> {
     @Override
     @Delete("DELETE FROM route_cities WHERE route_cities_id = #{id}")
     void deleteById(Long id);
+
+    @Delete("DELETE FROM route_cities WHERE city_id = #{id}")
+    void deleteByCityId(Long id);
 
     @Select("SELECT c.city_id AS city_id, c.title AS city_title, c.x AS city_x, c.y AS city_y " +
             "FROM route_cities rc " +

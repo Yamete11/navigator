@@ -17,8 +17,8 @@ public class StartLocationServiceImpl implements StartLocationService {
     }
 
     @Override
-    public StartLocation create(StartLocation entity) {
-        return startLocationMapper.create(entity);
+    public void create(StartLocation entity) {
+        startLocationMapper.create(entity);
     }
 
     @Override
@@ -39,5 +39,10 @@ public class StartLocationServiceImpl implements StartLocationService {
     @Override
     public void deleteById(Long id) {
         startLocationMapper.deleteById(id);
+    }
+
+    @Override
+    public void deleteByCityId(Long id) {
+        startLocationMapper.deleteByCityId(id);
     }
 }

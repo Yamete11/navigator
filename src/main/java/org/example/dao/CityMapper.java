@@ -12,7 +12,7 @@ public interface CityMapper extends GenericDao<City>{
     @Override
     @Insert("INSERT INTO cities (city_id, title, x, y) VALUES (#{id}, #{title}, #{x}, #{y})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    City create(City entity);
+    void create(City entity);
 
     @Override
     @Select("SELECT c.city_id, c.title, c.x, c.y FROM cities c WHERE c.city_id = #{id}")

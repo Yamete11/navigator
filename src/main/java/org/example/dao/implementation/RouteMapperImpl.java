@@ -18,12 +18,11 @@ public class RouteMapperImpl implements RouteMapper {
     }
 
     @Override
-    public Route create(Route entity) {
+    public void create(Route entity) {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             RouteMapper routeMapper = session.getMapper(RouteMapper.class);
             routeMapper.create(entity);
             session.commit();
-            return entity;
         }
     }
 

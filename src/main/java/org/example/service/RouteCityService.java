@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface RouteCityService extends GenericService<RouteCity> {
     List<City> getCitiesByRouteId(Long id);
+    void deleteByCityId(Long id);
+
 }

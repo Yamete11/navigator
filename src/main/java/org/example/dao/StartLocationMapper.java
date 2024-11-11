@@ -12,7 +12,7 @@ public interface StartLocationMapper extends GenericDao<StartLocation> {
     @Override
     @Insert("INSERT INTO start_locations (start_location_id, city_id) VALUES (#{id}, #{city.id})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    StartLocation create(StartLocation entity);
+    void create(StartLocation entity);
 
     @Override
     @Select("SELECT sl.start_location_id, c.city_id, c.title, c.x, c.y " +
@@ -48,4 +48,7 @@ public interface StartLocationMapper extends GenericDao<StartLocation> {
     @Override
     @Delete("DELETE FROM start_locations WHERE start_location_id = #{id}")
     void deleteById(Long id);
+
+    @Delete("DELETE FROM start_locations WHERE city_id = #{id}")
+    void deleteByCityId(Long id);
 }

@@ -18,12 +18,11 @@ public class CityConnectionMapperImpl implements CityConnectionMapper {
     }
 
     @Override
-    public CityConnection create(CityConnection entity) {
+    public void create(CityConnection entity) {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             CityConnectionMapper cityConnectionMapper = session.getMapper(CityConnectionMapper.class);
             cityConnectionMapper.create(entity);
             session.commit();
-            return entity;
         }
     }
 
@@ -57,6 +56,15 @@ public class CityConnectionMapperImpl implements CityConnectionMapper {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             CityConnectionMapper cityConnectionMapper = session.getMapper(CityConnectionMapper.class);
             cityConnectionMapper.deleteById(id);
+            session.commit();
+        }
+    }
+
+    @Override
+    public void deleteByCityId(Long id) {
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            CityConnectionMapper cityConnectionMapper = session.getMapper(CityConnectionMapper.class);
+            cityConnectionMapper.deleteByCityId(id);
             session.commit();
         }
     }

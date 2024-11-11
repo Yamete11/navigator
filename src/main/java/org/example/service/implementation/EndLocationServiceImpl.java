@@ -17,8 +17,8 @@ public class EndLocationServiceImpl implements EndLocationService {
     }
 
     @Override
-    public EndLocation create(EndLocation entity) {
-        return endLocationMapper.create(entity);
+    public void create(EndLocation entity) {
+        endLocationMapper.create(entity);
     }
 
     @Override
@@ -39,5 +39,10 @@ public class EndLocationServiceImpl implements EndLocationService {
     @Override
     public void deleteById(Long id) {
         endLocationMapper.deleteById(id);
+    }
+
+    @Override
+    public void deleteByCityId(Long id) {
+        endLocationMapper.deleteByCityId(id);
     }
 }

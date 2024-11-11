@@ -19,12 +19,11 @@ public class RouteCityMapperImpl implements RouteCityMapper {
     }
 
     @Override
-    public RouteCity create(RouteCity entity) {
+    public void create(RouteCity entity) {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             RouteCityMapper routeCityMapper = session.getMapper(RouteCityMapper.class);
             routeCityMapper.create(entity);
             session.commit();
-            return entity;
         }
     }
 
@@ -58,6 +57,15 @@ public class RouteCityMapperImpl implements RouteCityMapper {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             RouteCityMapper routeCityMapper = session.getMapper(RouteCityMapper.class);
             routeCityMapper.deleteById(id);
+            session.commit();
+        }
+    }
+
+    @Override
+    public void deleteByCityId(Long id) {
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            RouteCityMapper routeCityMapper = session.getMapper(RouteCityMapper.class);
+            routeCityMapper.deleteByCityId(id);
             session.commit();
         }
     }

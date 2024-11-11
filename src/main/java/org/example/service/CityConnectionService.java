@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface CityConnectionService extends GenericService<CityConnection> {
     List<CityConnection> getCityConnectionsByCityId(Long id);
+    void deleteByCityId(Long id);
+
 }

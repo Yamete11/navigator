@@ -10,10 +10,12 @@ import java.util.Optional;
 public interface CityConnectionMapper extends GenericDao<CityConnection> {
 
     @Override
-    @Insert("INSERT INTO navigator.City_connections (city_connection_id, distance, first_city_id, second_city_Id) " +
-            "VALUES (#{id}, #{distance}, #{firstCityId}, #{secondCityId})")
+    @Insert("INSERT INTO navigator.City_connections (distance, first_city_id, second_city_id) " +
+            "VALUES (#{distance}, #{firstCity.id}, #{secondCity.id})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    CityConnection create(CityConnection entity);
+    void create(CityConnection entity);
+
+
 
     @Override
     @Select("SELECT cc.city_connection_id, cc.distance, " +
@@ -60,13 +62,16 @@ public interface CityConnectionMapper extends GenericDao<CityConnection> {
 
 
     @Override
-    @Update("UPDATE navigator.City_connections SET distance = #{distance}, first_city_id = #{firstCityId}, second_city_Id = #{secondCityId} " +
+    @Update("UPDATE navigator.City_connections SET distance = #{distance}, first_city_id = #{firstCity.id}, second_city_Id = #{secondCity.id} " +
             "WHERE city_connection_id = #{id}")
     void update(CityConnection entity);
 
     @Override
     @Delete("DELETE FROM navigator.City_connections WHERE city_connection_id = #{id}")
     void deleteById(Long id);
+
+    @Delete("DELETE FROM navigator.City_connections WHERE first_city_id = #{id} OR second_city_id = #{id}")
+    void deleteByCityId(Long id);
 
 
     @Select("SELECT cc.city_connection_id, cc.distance, " +
@@ -75,7 +80,7 @@ public interface CityConnectionMapper extends GenericDao<CityConnection> {
             "FROM navigator.City_connections cc " +
             "JOIN navigator.Cities c1 ON cc.first_city_id = c1.city_id " +
             "JOIN navigator.Cities c2 ON cc.second_city_Id = c2.city_id " +
-            "WHERE first_city = #{id} or second_city = #{id}")
+            "WHERE first_city_id = #{id} or second_city_id = #{id}")
     @Results({
             @Result(property = "id", column = "city_connection_id"),
             @Result(property = "distance", column = "distance"),
