@@ -1,7 +1,7 @@
 package org.example.ui;
 
-public class ViewMap {
+public class MapView {
     public static void main(String[] args) {
-        new GraphDrawer(new NavigatorMockImpl()).draw();
+        System.out.println(new GraphDrawer(new NavigatorMockImpl()).draw());
     }
 }

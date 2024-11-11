@@ -6,48 +6,60 @@ import java.util.List;
 
 public class GraphDrawer {
 
-    private INavigator navigator;
+    private final INavigator navigator;
+    private static final int MAP_HEIGHT = 2;
+    private static final int MAP_WIDTH = 2;
 
     public GraphDrawer(INavigator navigator) {
         this.navigator = navigator;
     }
 
-    private static final int MAP_HEIGHT = 2;
-    private static final int MAP_WIDTH = 2;
-
-    public void draw() {
+    public String draw() {
         List<CityConnection> connections = navigator.findAllCityConnections();
+        String[][] map = initializeMap();
+        return buildMapString(map);
+    }
 
+    private static String[][] initializeMap() {
         String[][] map = new String[MAP_HEIGHT][MAP_WIDTH];
         for (int i = 0; i < MAP_HEIGHT; i++) {
             for (int j = 0; j < MAP_WIDTH; j++) {
                 map[i][j] = "  ";
             }
         }
-        printMap(map);
+        return map;
     }
 
-    private void printMap(String [][] map) {
-        // Print top border
-        for (int j = 0; j < MAP_WIDTH + 2; j++) {
-            System.out.print("# ");
-        }
-        System.out.println();
+    private String buildMapString(String[][] map) {
+        StringBuilder sb = new StringBuilder();
+        appendTopBorder(sb);
+        appendMapContent(sb, map);
+        appendBottomBorder(sb);
+        return sb.toString();
+    }
 
-        // Print map with borders
+    private void appendTopBorder(StringBuilder sb) {
+        for (int j = 0; j < MAP_WIDTH + 2; j++) {
+            sb.append("# ");
+        }
+        sb.append("\n");
+    }
+
+    private void appendBottomBorder(StringBuilder sb) {
+        for (int j = 0; j < MAP_WIDTH + 2; j++) {
+            sb.append("# ");
+        }
+        sb.append("\n");
+    }
+
+    private void appendMapContent(StringBuilder sb, String[][] map) {
         for (int i = 0; i < MAP_HEIGHT; i++) {
-            System.out.print("# "); // Left border
+            sb.append("# ");
             for (int j = 0; j < MAP_WIDTH; j++) {
-                System.out.print(map[i][j]);
+                sb.append(map[i][j]);
             }
-            System.out.println("# "); // Right border
+            sb.append("# \n");
         }
-
-        // Print bottom border
-        for (int j = 0; j < MAP_WIDTH + 2; j++) {
-            System.out.print("# ");
-        }
-        System.out.println();
     }
 
 }
