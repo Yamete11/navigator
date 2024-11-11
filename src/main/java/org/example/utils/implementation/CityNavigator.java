@@ -1,13 +1,12 @@
 package org.example.utils.implementation;
 
-import lombok.AllArgsConstructor;
 import org.example.model.*;
 import org.example.service.*;
+import org.example.service.implementation.*;
 import org.example.utils.Navigator;
 
 import java.util.*;
 
-@AllArgsConstructor
 public class CityNavigator implements Navigator {
     private CityService cityService;
     private CityConnectionService cityConnectionService;
@@ -15,6 +14,15 @@ public class CityNavigator implements Navigator {
     private StartLocationService startLocationService;
     private EndLocationService endLocationService;
     private RouteService routeService;
+
+    public CityNavigator() {
+        this.cityService = new CityServiceImpl();
+        this.cityConnectionService = new CityConnectionServiceImpl();
+        this.routeCityService = new RouteCityServiceImpl();
+        this.startLocationService = new StartLocationServiceImpl();
+        this.endLocationService = new EndLocationServiceImpl();
+        this.routeService = new RouteServiceImpl();
+    }
 
     @Override
     public Route findRoute(City start, City end) {
@@ -91,20 +99,9 @@ public class CityNavigator implements Navigator {
 
     @Override
     public Double calculateDistance(CityConnection cityConnection) {
-        Optional<CityConnection> optional = cityConnectionService.getById(cityConnection.getId());
-        CityConnection connection = optional.orElse(null);
-        if (connection == null) {
-            throw new IllegalArgumentException("City connection not found");
-        }
-        if (connection.getDistance() != 0.0d) {
-            return optional.get().getDistance();
-        }
-        City city1 = connection.getFirstCity();
-        City city2 = connection.getSecondCity();
-        Double distance = Math.sqrt(Math.pow(city2.getX() - city1.getX(), 2) + Math.pow(city2.getY() - city1.getY(), 2));
-        connection.setDistance(distance);
-        cityConnectionService.update(connection);
-        return distance;
+        City city1 = cityConnection.getFirstCity();
+        City city2 = cityConnection.getSecondCity();
+        return Math.sqrt(Math.pow(city2.getX() - city1.getX(), 2) + Math.pow(city2.getY() - city1.getY(), 2));
     }
 
     @Override
