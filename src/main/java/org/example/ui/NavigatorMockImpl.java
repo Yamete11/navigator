@@ -15,9 +15,15 @@ public class NavigatorMockImpl implements INavigator{
                 );
 
         CityConnection cityConnection2 =
-                new CityConnection(1L,6.0,
+                new CityConnection(2L,6.0,
                         new City(1L,"Szcz",8.0,6.0),
                         new City(2L,"Poz",2.0,6.0)
+                );
+
+        CityConnection cityConnection3 =
+                new CityConnection(3L,6.0,
+                        new City(1L,"Szcz",8.0,6.0),
+                        new City(2L,"Rzesz",5.0,8.0)
                 );
 
         return List.of(cityConnection1,cityConnection2);
