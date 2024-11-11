@@ -17,8 +17,8 @@ public class CityConnectionServiceImpl implements CityConnectionService {
     }
 
     @Override
-    public CityConnection create(CityConnection cityConnection) {
-        return cityConnectionMapper.create(cityConnection);
+    public void create(CityConnection cityConnection) {
+        cityConnectionMapper.create(cityConnection);
     }
 
     @Override
@@ -39,6 +39,11 @@ public class CityConnectionServiceImpl implements CityConnectionService {
     @Override
     public void deleteById(Long id) {
         cityConnectionMapper.deleteById(id);
+    }
+
+    @Override
+    public void deleteByCityId(Long id) {
+        cityConnectionMapper.deleteByCityId(id);
     }
 
     @Override

@@ -3,6 +3,7 @@ package org.example.dao.implementation;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.example.config.ConnectionManager;
+import org.example.dao.CityConnectionMapper;
 import org.example.dao.StartLocationMapper;
 import org.example.model.StartLocation;
 
@@ -18,12 +19,11 @@ public class StartLocationMapperImpl implements StartLocationMapper {
     }
 
     @Override
-    public StartLocation create(StartLocation entity) {
+    public void create(StartLocation entity) {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             StartLocationMapper startLocationMapper = session.getMapper(StartLocationMapper.class);
             startLocationMapper.create(entity);
             session.commit();
-            return entity;
         }
     }
 
@@ -57,6 +57,15 @@ public class StartLocationMapperImpl implements StartLocationMapper {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             StartLocationMapper startLocationMapper = session.getMapper(StartLocationMapper.class);
             startLocationMapper.deleteById(id);
+            session.commit();
+        }
+    }
+
+    @Override
+    public void deleteByCityId(Long id) {
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            StartLocationMapper startLocationMapper = session.getMapper(StartLocationMapper.class);
+            startLocationMapper.deleteByCityId(id);
             session.commit();
         }
     }

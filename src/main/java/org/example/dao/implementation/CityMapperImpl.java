@@ -18,12 +18,11 @@ public class CityMapperImpl implements CityMapper {
     }
 
     @Override
-    public City create(City entity) {
+    public void create(City entity) {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             CityMapper cityMapper = session.getMapper(CityMapper.class);
             cityMapper.create(entity);
             session.commit();
-            return entity;
         }
     }
 

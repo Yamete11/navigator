@@ -11,15 +11,24 @@ import java.util.Optional;
 public class CityServiceImpl implements CityService {
 
     private final CityMapper cityMapper;
+    private final CityConnectionServiceImpl cityConnectionService;
+    private final RouteCityServiceImpl routeCityService;
+    private final StartLocationServiceImpl startLocationService;
+    private final EndLocationServiceImpl endLocationService;
+
 
     public CityServiceImpl() {
         this.cityMapper = new CityMapperImpl();
+        this.cityConnectionService = new CityConnectionServiceImpl();
+        this.routeCityService = new RouteCityServiceImpl();
+        this.startLocationService = new StartLocationServiceImpl();
+        this.endLocationService = new EndLocationServiceImpl();
     }
 
 
     @Override
-    public City create(City city) {
-        return cityMapper.create(city);
+    public void create(City city) {
+        cityMapper.create(city);
     }
 
     @Override
@@ -39,6 +48,10 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public void deleteById(Long id) {
+        cityConnectionService.deleteByCityId(id);
+        /*startLocationService.deleteByCityId(id);
+        endLocationService.deleteByCityId(id);
+        routeCityService.deleteByCityId(id);*/
         cityMapper.deleteById(id);
     }
 

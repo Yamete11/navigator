@@ -17,8 +17,8 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public Route create(Route route) {
-        return routeMapper.create(route);
+    public void create(Route route) {
+        routeMapper.create(route);
     }
 
     @Override

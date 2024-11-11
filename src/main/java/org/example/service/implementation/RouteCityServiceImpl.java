@@ -18,8 +18,8 @@ public class RouteCityServiceImpl implements RouteCityService {
     }
 
     @Override
-    public RouteCity create(RouteCity routeCity) {
-        return routeCityMapper.create(routeCity);
+    public void create(RouteCity routeCity) {
+        routeCityMapper.create(routeCity);
     }
 
     @Override
@@ -45,5 +45,10 @@ public class RouteCityServiceImpl implements RouteCityService {
     @Override
     public List<City> getCitiesByRouteId(Long id) {
         return routeCityMapper.getCitiesByRouteId(id);
+    }
+
+    @Override
+    public void deleteByCityId(Long id) {
+        routeCityMapper.deleteByCityId(id);
     }
 }

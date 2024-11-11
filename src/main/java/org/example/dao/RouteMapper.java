@@ -15,7 +15,7 @@ public interface RouteMapper extends GenericDao<Route> {
     @Insert("INSERT INTO Routes (total_distance, start_location_id, end_location_id) " +
             "VALUES (#{totalDistance}, #{startLocation.id}, #{endLocation.id})")
     @Options(useGeneratedKeys = true, keyProperty = "routeId")
-    Route create(Route entity);
+    void create(Route entity);
 
     @Override
     @Select("SELECT r.route_id, r.total_distance, " +
