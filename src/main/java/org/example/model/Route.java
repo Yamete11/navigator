@@ -2,7 +2,7 @@ package org.example.model;
 
 public class Route {
     private Long id;
-    private Double distance;
+    private Double totalDistance;
     private StartLocation startLocation;
     private EndLocation endLocation;
 
@@ -11,13 +11,13 @@ public class Route {
 
     public Route(Long id, Double distance, StartLocation startLocation, EndLocation endLocation) {
         this.id = id;
-        this.distance = distance;
+        this.totalDistance = distance;
         this.startLocation = startLocation;
         this.endLocation = endLocation;
     }
 
     public Route(Double distance, StartLocation startLocation, EndLocation endLocation) {
-        this.distance = distance;
+        this.totalDistance = distance;
         this.startLocation = startLocation;
         this.endLocation = endLocation;
     }
@@ -30,12 +30,12 @@ public class Route {
         this.id = id;
     }
 
-    public Double getDistance() {
-        return distance;
+    public Double getTotalDistance() {
+        return totalDistance;
     }
 
-    public void setDistance(Double distance) {
-        this.distance = distance;
+    public void setTotalDistance(Double totalDistance) {
+        this.totalDistance = totalDistance;
     }
 
     public StartLocation getStartLocation() {
@@ -58,7 +58,7 @@ public class Route {
     public String toString() {
         return "Route{" +
                 "id=" + id +
-                ", distance=" + distance +
+                ", distance=" + totalDistance +
                 ", startLocation=" + startLocation +
                 ", endLocation=" + endLocation +
                 '}';

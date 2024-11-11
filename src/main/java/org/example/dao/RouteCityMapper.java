@@ -12,8 +12,19 @@ public interface RouteCityMapper extends GenericDao<RouteCity> {
 
     @Override
     @Insert("INSERT INTO route_cities (city_id, route_id, order_index) VALUES (#{city.id}, #{route.id}, #{orderIndex})")
-    @Options(useGeneratedKeys = true, keyProperty = "routeCitiesId")
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     void create(RouteCity entity);
+
+    @Insert({
+            "<script>",
+            "INSERT INTO route_cities (city_id, route_id, order_index) VALUES ",
+            "<foreach collection='routeCities' item='routeCity' separator=','>",
+            "(#{routeCity.city.id}, #{routeCity.route.id}, #{routeCity.orderIndex})",
+            "</foreach>",
+            "</script>"
+    })
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    void createBatch(@Param("routeCities") List<RouteCity> routeCities);
 
     @Override
     @Select("SELECT rc.route_cities_id, " +
@@ -25,7 +36,7 @@ public interface RouteCityMapper extends GenericDao<RouteCity> {
             "JOIN routes r ON rc.route_id = r.route_id " +
             "WHERE rc.route_cities_id = #{id}")
     @Results({
-            @Result(column = "route_cities_id", property = "routeCitiesId"),
+            @Result(column = "route_cities_id", property = "id"),
             @Result(property = "city.id", column = "city_id"),
             @Result(property = "city.title", column = "city_title"),
             @Result(property = "city.x", column = "city_x"),
@@ -34,7 +45,7 @@ public interface RouteCityMapper extends GenericDao<RouteCity> {
             @Result(property = "route.totalDistance", column = "route_total_distance"),
             @Result(property = "orderIndex", column = "order_index")
     })
-    Optional<RouteCity> getById(Long id);
+    Optional<RouteCity> getById(@Param("id") Long id);
 
     @Override
     @Select("SELECT rc.route_cities_id, " +
@@ -62,10 +73,13 @@ public interface RouteCityMapper extends GenericDao<RouteCity> {
 
     @Override
     @Delete("DELETE FROM route_cities WHERE route_cities_id = #{id}")
-    void deleteById(Long id);
+    void deleteById(@Param("id") Long id);
 
     @Delete("DELETE FROM route_cities WHERE city_id = #{id}")
-    void deleteByCityId(Long id);
+    void deleteByCityId(@Param("id") Long id);
+
+    @Delete("DELETE FROM route_cities WHERE route_id = #{id}")
+    void deleteByRouteId(@Param("id") Long id);
 
     @Select("SELECT c.city_id AS city_id, c.title AS city_title, c.x AS city_x, c.y AS city_y " +
             "FROM route_cities rc " +

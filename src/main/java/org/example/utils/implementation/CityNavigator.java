@@ -76,7 +76,7 @@ public class CityNavigator implements Navigator {
 
     private Route buildRoute(Double distance, City start, City end, Map<Long, Long> previousCities) {
         Route result = new Route();
-        result.setDistance(distance);
+        result.setTotalDistance(distance);
 
         StartLocation startLocation = new StartLocation(start);
         startLocationService.create(startLocation);
