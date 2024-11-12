@@ -56,7 +56,7 @@ public interface RouteCityMapper extends GenericDao<RouteCity> {
             "JOIN cities c ON rc.city_id = c.city_id " +
             "JOIN routes r ON rc.route_id = r.route_id")
     @Results({
-            @Result(column = "route_cities_id", property = "routeCitiesId"),
+            @Result(column = "route_cities_id", property = "id"),
             @Result(property = "city.id", column = "city_id"),
             @Result(property = "city.title", column = "city_title"),
             @Result(property = "city.x", column = "city_x"),

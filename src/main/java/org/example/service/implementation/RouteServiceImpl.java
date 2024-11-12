@@ -29,7 +29,8 @@ public class RouteServiceImpl implements RouteService {
         startLocationService.create(route.getStartLocation());
         endLocationService.create(route.getEndLocation());
         routeMapper.create(route);
-        List<RouteCity> routeCities = new ArrayList<>();
+        //Here we have to get the list of RouteCity and calculate the distance
+        /*List<RouteCity> routeCities = new ArrayList<>();
 
         RouteCity routeCity1 = new RouteCity();
         routeCity1.setCity(route.getStartLocation().getCity());
@@ -43,7 +44,7 @@ public class RouteServiceImpl implements RouteService {
 
         routeCities.add(routeCity1);
         routeCities.add(routeCity2);
-        routeCityService.createBatch(routeCities);
+        routeCityService.createBatch(routeCities);*/
     }
 
     @Override
@@ -68,5 +69,10 @@ public class RouteServiceImpl implements RouteService {
         routeMapper.deleteById(id);
         startLocationService.deleteById(route.getStartLocation().getId());
         endLocationService.deleteById(route.getEndLocation().getId());
+    }
+
+    @Override
+    public List<Route> getRoutesByCityId(Long id) {
+        return routeMapper.getRoutesByCityId(id);
     }
 }

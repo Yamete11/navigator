@@ -77,4 +77,30 @@ public interface RouteMapper extends GenericDao<Route> {
     @Override
     @Delete("DELETE FROM Routes WHERE route_id = #{id}")
     void deleteById(Long id);
+
+
+    @Select("SELECT r.route_id AS id, r.total_distance, " +
+            "sl.start_location_id AS start_location_id, sl.city_id AS start_city_id, c1.title AS start_city_title, c1.x AS start_x, c1.y AS start_y, " +
+            "el.end_location_id AS end_location_id, el.city_id AS end_city_id, c2.title AS end_city_title, c2.x AS end_x, c2.y AS end_y " +
+            "FROM Routes r " +
+            "JOIN start_locations sl ON r.start_location_id = sl.start_location_id " +
+            "JOIN cities c1 ON sl.city_id = c1.city_id " +
+            "JOIN end_locations el ON r.end_location_id = el.end_location_id " +
+            "JOIN cities c2 ON el.city_id = c2.city_id " +
+            "WHERE sl.city_id = #{cityId} OR el.city_id = #{cityId}")
+    @Results({
+            @Result(column = "id", property = "id"),
+            @Result(column = "total_distance", property = "totalDistance"),
+            @Result(property = "startLocation.id", column = "start_location_id"),
+            @Result(property = "startLocation.city.id", column = "start_city_id"),
+            @Result(property = "startLocation.city.title", column = "start_city_title"),
+            @Result(property = "startLocation.city.x", column = "start_x"),
+            @Result(property = "startLocation.city.y", column = "start_y"),
+            @Result(property = "endLocation.id", column = "end_location_id"),
+            @Result(property = "endLocation.city.id", column = "end_city_id"),
+            @Result(property = "endLocation.city.title", column = "end_city_title"),
+            @Result(property = "endLocation.city.x", column = "end_x"),
+            @Result(property = "endLocation.city.y", column = "end_y")
+    })
+    List<Route> getRoutesByCityId(Long cityId);
 }
