@@ -12,17 +12,13 @@ public class AStarStrategy implements RouteFindingStrategy {
     private final Graph graph;
     private final Navigator navigator;
     private final CityService cityService;
+    private final HeuristicCache heuristicCache;
 
     public AStarStrategy() {
         graph = GraphLoader.getGraph();
         navigator = new CityNavigator();
         cityService = new CityServiceImpl();
-    }
-
-    private Double heuristic(Node a, Node b) {
-        Optional<City> cityA = cityService.getById(a.getId());
-        Optional<City> cityB = cityService.getById(b.getId());
-        return DistanceCalculator.calculateDistance(cityA, cityB);
+        this.heuristicCache = HeuristicCache.getInstance();
     }
 
     @Override
@@ -45,7 +41,7 @@ public class AStarStrategy implements RouteFindingStrategy {
         }
 
         gScore.put(startNode, 0.0d);
-        fScore.put(startNode, heuristic(startNode, endNode));
+        fScore.put(startNode, heuristicCache.getHeuristic(start, end));
         openSet.add(startNode);
 
         while (!openSet.isEmpty()) {
@@ -58,12 +54,14 @@ public class AStarStrategy implements RouteFindingStrategy {
             for (Map.Entry<Node, Double> neighborEntry : current.getNeighbors().entrySet()) {
                 Long neighborId = neighborEntry.getKey().getId();
                 Node neighbor = graph.getNode(neighborId);
-                Double tentativeGScore = gScore.get(current) + neighborEntry.getValue();
+                double tentativeGScore = gScore.getOrDefault(current, Double.MAX_VALUE) + neighborEntry.getValue();
 
-                if (tentativeGScore < gScore.get(neighbor)) {
+                if (tentativeGScore < gScore.getOrDefault(neighbor, Double.MAX_VALUE)) {
                     cameFrom.put(neighbor, current);
                     gScore.put(neighbor, tentativeGScore);
-                    fScore.put(neighbor, tentativeGScore + heuristic(neighbor, endNode));
+
+                    double heuristic = heuristicCache.getHeuristic(cityService.getById(neighbor.getId()).get(), end);
+                    fScore.put(neighbor, tentativeGScore + heuristic);
 
                     if (!openSet.contains(neighbor)) {
                         openSet.add(neighbor);

@@ -12,6 +12,10 @@ public class DistanceCalculator {
         return Math.sqrt(Math.pow(cityB.getX() - cityA.getX(), 2) + Math.pow(cityB.getY() - cityA.getY(), 2));
     }
 
+    public static Double calculateDistance(City city1, City city2) {
+        return Math.sqrt(Math.pow(city2.getX() - city1.getX(), 2) + Math.pow(city2.getY() - city1.getY(), 2));
+    }
+
     public static Double calculateDistance(CityConnection cityConnection) {
         City cityA = cityConnection.getFirstCity();
         City cityB = cityConnection.getSecondCity();
