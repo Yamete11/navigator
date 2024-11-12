@@ -46,7 +46,7 @@ public class DijkstraStrategy implements RouteFindingStrategy {
             for (Map.Entry<Node, Double> neighborEntry : currentNode.getNeighbors().entrySet()) {
                 Long neighborNodeId = neighborEntry.getKey().getId();
                 Node neighborNode = graph.getNode(neighborNodeId);
-                double distance = navigator.calculateDistance(cityService.getById(currentNode.getId()), cityService.getById(neighborNode.getId()));
+                double distance = DistanceCalculator.calculateDistance(cityService.getById(currentNode.getId()), cityService.getById(neighborNode.getId()));
                 double distanceThroughRoute = distances.get(currentNode) + distance;
 
                 if (distanceThroughRoute < distances.get(neighborNode)) {

@@ -22,7 +22,7 @@ public class AStarStrategy implements RouteFindingStrategy {
     private Double heuristic(Node a, Node b) {
         Optional<City> cityA = cityService.getById(a.getId());
         Optional<City> cityB = cityService.getById(b.getId());
-        return navigator.calculateDistance(cityA, cityB);
+        return DistanceCalculator.calculateDistance(cityA, cityB);
     }
 
     @Override
