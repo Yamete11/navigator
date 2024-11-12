@@ -18,6 +18,7 @@ public class CityConnectionServiceImpl implements CityConnectionService {
 
     @Override
     public void create(CityConnection cityConnection) {
+        //Here we have to call a method to calculate the distance
         cityConnectionMapper.create(cityConnection);
     }
 

@@ -3,6 +3,7 @@ package org.example.service.implementation;
 import org.example.dao.CityMapper;
 import org.example.dao.implementation.CityMapperImpl;
 import org.example.model.City;
+import org.example.model.Route;
 import org.example.service.CityService;
 
 import java.util.List;
@@ -12,17 +13,15 @@ public class CityServiceImpl implements CityService {
 
     private final CityMapper cityMapper;
     private final CityConnectionServiceImpl cityConnectionService;
-    private final RouteCityServiceImpl routeCityService;
-    private final StartLocationServiceImpl startLocationService;
-    private final EndLocationServiceImpl endLocationService;
+    private final RouteServiceImpl routeService;
+
 
 
     public CityServiceImpl() {
         this.cityMapper = new CityMapperImpl();
         this.cityConnectionService = new CityConnectionServiceImpl();
-        this.routeCityService = new RouteCityServiceImpl();
-        this.startLocationService = new StartLocationServiceImpl();
-        this.endLocationService = new EndLocationServiceImpl();
+        this.routeService = new RouteServiceImpl();
+
     }
 
 
@@ -49,9 +48,10 @@ public class CityServiceImpl implements CityService {
     @Override
     public void deleteById(Long id) {
         cityConnectionService.deleteByCityId(id);
-        /*startLocationService.deleteByCityId(id);
-        endLocationService.deleteByCityId(id);
-        routeCityService.deleteByCityId(id);*/
+        List<Route> routes = routeService.getRoutesByCityId(id);
+        for (Route route : routes) {
+            routeService.deleteById(route.getId());
+        }
         cityMapper.deleteById(id);
     }
 
