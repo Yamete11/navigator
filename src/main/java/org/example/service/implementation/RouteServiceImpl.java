@@ -2,6 +2,7 @@ package org.example.service.implementation;
 
 import org.example.dao.RouteMapper;
 import org.example.dao.implementation.RouteMapperImpl;
+import org.example.model.CityConnection;
 import org.example.model.Route;
 import org.example.model.RouteCity;
 import org.example.service.RouteService;
@@ -16,12 +17,16 @@ public class RouteServiceImpl implements RouteService {
     private final StartLocationServiceImpl startLocationService;
     private final EndLocationServiceImpl endLocationService;
     private final RouteCityServiceImpl routeCityService;
+    private final CityServiceImpl cityService;
+    private final CityConnectionServiceImpl cityConnection;
 
     public RouteServiceImpl() {
         this.routeMapper = new RouteMapperImpl();
         this.startLocationService = new StartLocationServiceImpl();
         this.endLocationService = new EndLocationServiceImpl();
         this.routeCityService = new RouteCityServiceImpl();
+        this.cityService = new CityServiceImpl();
+        this.cityConnection = new CityConnectionServiceImpl();
     }
 
     @Override
@@ -31,19 +36,6 @@ public class RouteServiceImpl implements RouteService {
         routeMapper.create(route);
         //Here we have to get the list of RouteCity and calculate the distance
         /*List<RouteCity> routeCities = new ArrayList<>();
-
-        RouteCity routeCity1 = new RouteCity();
-        routeCity1.setCity(route.getStartLocation().getCity());
-        routeCity1.setRoute(route);
-        routeCity1.setOrderIndex(1L);
-
-        RouteCity routeCity2 = new RouteCity();
-        routeCity2.setCity(route.getEndLocation().getCity());
-        routeCity2.setRoute(route);
-        routeCity2.setOrderIndex(2L);
-
-        routeCities.add(routeCity1);
-        routeCities.add(routeCity2);
         routeCityService.createBatch(routeCities);*/
     }
 
