@@ -4,6 +4,7 @@ import org.example.dao.CityConnectionMapper;
 import org.example.dao.implementation.CityConnectionMapperImpl;
 import org.example.model.CityConnection;
 import org.example.service.CityConnectionService;
+import org.example.utils.DistanceCalculator;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +19,7 @@ public class CityConnectionServiceImpl implements CityConnectionService {
 
     @Override
     public void create(CityConnection cityConnection) {
-        //Here we have to call a method to calculate the distance
+        cityConnection.setDistance(DistanceCalculator.calculateDistance(cityConnection));
         cityConnectionMapper.create(cityConnection);
     }
 

@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.model.*;
 import org.example.service.implementation.*;
+import org.example.service.observer.CityLogger;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,7 +14,7 @@ public class Main {
         EndLocationServiceImpl endLocationService = new EndLocationServiceImpl();
 
 
-        //Main.createCity();
+        Main.createCity();
 
 
 /*      cityService.findAll().forEach(System.out::println);
@@ -34,6 +35,8 @@ public class Main {
         EndLocationServiceImpl endLocationService = new EndLocationServiceImpl();
         CityServiceImpl cityService = new CityServiceImpl();
         CityConnectionServiceImpl cityConnectionService = new CityConnectionServiceImpl();
+        CityLogger cityLogger = new CityLogger();
+        cityService.addObserver(cityLogger);
 
         City city1 = new City();
         city1.setTitle("CityA");
@@ -76,39 +79,30 @@ public class Main {
         CityConnection cityConnection1 = new CityConnection();
         cityConnection1.setFirstCity(city1);
         cityConnection1.setSecondCity(city7);
-        cityConnection1.setDistance(40.0);
         CityConnection cityConnection2 = new CityConnection();
         cityConnection2.setFirstCity(city1);
         cityConnection2.setSecondCity(city3);
-        cityConnection2.setDistance(40.0);
         CityConnection cityConnection3 = new CityConnection();
         cityConnection3.setFirstCity(city7);
         cityConnection3.setSecondCity(city5);
-        cityConnection3.setDistance(40.0);
         CityConnection cityConnection4 = new CityConnection();
         cityConnection4.setFirstCity(city3);
         cityConnection4.setSecondCity(city5);
-        cityConnection4.setDistance(40.0);
         CityConnection cityConnection5 = new CityConnection();
         cityConnection5.setFirstCity(city3);
         cityConnection5.setSecondCity(city4);
-        cityConnection5.setDistance(40.0);
         CityConnection cityConnection6 = new CityConnection();
         cityConnection6.setFirstCity(city5);
         cityConnection6.setSecondCity(city6);
-        cityConnection6.setDistance(40.0);
         CityConnection cityConnection7 = new CityConnection();
         cityConnection7.setFirstCity(city4);
         cityConnection7.setSecondCity(city6);
-        cityConnection7.setDistance(40.0);
         CityConnection cityConnection8 = new CityConnection();
         cityConnection8.setFirstCity(city4);
         cityConnection8.setSecondCity(city2);
-        cityConnection8.setDistance(40.0);
         CityConnection cityConnection9 = new CityConnection();
         cityConnection9.setFirstCity(city2);
         cityConnection9.setSecondCity(city6);
-        cityConnection9.setDistance(40.0);
 
         cityConnectionService.create(cityConnection1);
         cityConnectionService.create(cityConnection2);
