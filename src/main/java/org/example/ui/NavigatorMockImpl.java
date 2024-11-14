@@ -69,5 +69,3 @@ public class NavigatorMockImpl implements INavigator, ICityConnectionChecker {
         System.out.println(connections.get(3));
     }
 }
-
-

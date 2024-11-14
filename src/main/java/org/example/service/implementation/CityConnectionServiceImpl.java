@@ -4,6 +4,7 @@ import org.example.dao.CityConnectionMapper;
 import org.example.dao.implementation.CityConnectionMapperImpl;
 import org.example.model.CityConnection;
 import org.example.service.CityConnectionService;
+import org.example.utils.DistanceCalculator;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,7 @@ public class CityConnectionServiceImpl implements CityConnectionService {
 
     @Override
     public void create(CityConnection cityConnection) {
+        cityConnection.setDistance(DistanceCalculator.calculateDistance(cityConnection));
         cityConnectionMapper.create(cityConnection);
     }
 
@@ -33,6 +35,11 @@ public class CityConnectionServiceImpl implements CityConnectionService {
 
     @Override
     public void update(CityConnection cityConnection) {
+        System.out.println("City one: " + cityConnection.getFirstCity().getX());
+        System.out.println("City two: " + cityConnection.getSecondCity().getX());
+        double distance = DistanceCalculator.calculateDistance(cityConnection);
+        System.out.println(distance);
+        cityConnection.setDistance(distance);
         cityConnectionMapper.update(cityConnection);
     }
 

@@ -59,4 +59,13 @@ public class RouteMapperImpl implements RouteMapper {
             session.commit();
         }
     }
+
+    @Override
+    public List<Route> getRoutesByCityId(Long id) {
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            RouteMapper routeMapper = session.getMapper(RouteMapper.class);
+            return routeMapper.getRoutesByCityId(id);
+        }
+    }
+
 }

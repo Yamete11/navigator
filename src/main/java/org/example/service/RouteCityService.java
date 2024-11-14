@@ -9,4 +9,8 @@ public interface RouteCityService extends GenericService<RouteCity> {
     List<City> getCitiesByRouteId(Long id);
     void deleteByCityId(Long id);
 
+    void deleteByRouteId(Long id);
+
+    void createBatch(List<RouteCity> routeCities);
+
 }

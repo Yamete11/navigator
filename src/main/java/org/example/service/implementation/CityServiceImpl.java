@@ -3,32 +3,43 @@ package org.example.service.implementation;
 import org.example.dao.CityMapper;
 import org.example.dao.implementation.CityMapperImpl;
 import org.example.model.City;
+import org.example.model.CityConnection;
+import org.example.model.Route;
+import org.example.model.RouteCity;
 import org.example.service.CityService;
+import org.example.service.observer.CityEventType;
+import org.example.service.observer.Observable;
+import org.example.service.observer.Observer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CityServiceImpl implements CityService {
+public class CityServiceImpl implements CityService, Observable {
 
     private final CityMapper cityMapper;
     private final CityConnectionServiceImpl cityConnectionService;
     private final RouteCityServiceImpl routeCityService;
-    private final StartLocationServiceImpl startLocationService;
-    private final EndLocationServiceImpl endLocationService;
-
+    private RouteServiceImpl routeService;
+    private final List<Observer> observers = new ArrayList<>();
 
     public CityServiceImpl() {
         this.cityMapper = new CityMapperImpl();
         this.cityConnectionService = new CityConnectionServiceImpl();
         this.routeCityService = new RouteCityServiceImpl();
-        this.startLocationService = new StartLocationServiceImpl();
-        this.endLocationService = new EndLocationServiceImpl();
     }
 
+    private RouteServiceImpl getRouteService() {
+        if (routeService == null) {
+            routeService = new RouteServiceImpl();
+        }
+        return routeService;
+    }
 
     @Override
     public void create(City city) {
         cityMapper.create(city);
+        notifyObservers(CityEventType.CITY_ADDED, city);
     }
 
     @Override
@@ -44,15 +55,32 @@ public class CityServiceImpl implements CityService {
     @Override
     public void update(City city) {
         cityMapper.update(city);
+        List<CityConnection> connections = cityConnectionService.getCityConnectionsByCityId(city.getId());
+        for(CityConnection connection : connections){
+            cityConnectionService.update(connection);
+        }
+        List<Route> routeList = getRouteService().findAll();
+        for(Route route : routeList){
+            routeCityService.deleteByRouteId(route.getId());
+        }
+        for(Route route : routeList){
+            getRouteService().update(route);
+        }
+        notifyObservers(CityEventType.CITY_UPDATED, city);
     }
 
     @Override
     public void deleteById(Long id) {
-        cityConnectionService.deleteByCityId(id);
-        /*startLocationService.deleteByCityId(id);
-        endLocationService.deleteByCityId(id);
-        routeCityService.deleteByCityId(id);*/
-        cityMapper.deleteById(id);
+        Optional<City> cityOpt = getById(id);
+        cityOpt.ifPresent(city -> {
+            cityConnectionService.deleteByCityId(id);
+            List<Route> routes = getRouteService().getRoutesByCityId(id);
+            for (Route route : routes) {
+                getRouteService().deleteById(route.getId());
+            }
+            cityMapper.deleteById(id);
+            notifyObservers(CityEventType.CITY_DELETED, city);
+        });
     }
 
     @Override
@@ -60,4 +88,20 @@ public class CityServiceImpl implements CityService {
         return cityMapper.getByTitle(title);
     }
 
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers(CityEventType eventType, City city) {
+        for (Observer observer : observers) {
+            observer.update(eventType, city);
+        }
+    }
 }
