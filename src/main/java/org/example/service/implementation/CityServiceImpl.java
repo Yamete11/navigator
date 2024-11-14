@@ -5,6 +5,7 @@ import org.example.dao.implementation.CityMapperImpl;
 import org.example.model.City;
 import org.example.model.CityConnection;
 import org.example.model.Route;
+import org.example.model.RouteCity;
 import org.example.service.CityService;
 import org.example.service.observer.CityEventType;
 import org.example.service.observer.Observable;
@@ -18,12 +19,14 @@ public class CityServiceImpl implements CityService, Observable {
 
     private final CityMapper cityMapper;
     private final CityConnectionServiceImpl cityConnectionService;
+    private final RouteCityServiceImpl routeCityService;
     private RouteServiceImpl routeService;
     private final List<Observer> observers = new ArrayList<>();
 
     public CityServiceImpl() {
         this.cityMapper = new CityMapperImpl();
         this.cityConnectionService = new CityConnectionServiceImpl();
+        this.routeCityService = new RouteCityServiceImpl();
     }
 
     private RouteServiceImpl getRouteService() {
@@ -55,6 +58,13 @@ public class CityServiceImpl implements CityService, Observable {
         List<CityConnection> connections = cityConnectionService.getCityConnectionsByCityId(city.getId());
         for(CityConnection connection : connections){
             cityConnectionService.update(connection);
+        }
+        List<Route> routeList = getRouteService().findAll();
+        for(Route route : routeList){
+            routeCityService.deleteByRouteId(route.getId());
+        }
+        for(Route route : routeList){
+            getRouteService().update(route);
         }
         notifyObservers(CityEventType.CITY_UPDATED, city);
     }

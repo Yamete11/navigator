@@ -35,7 +35,11 @@ public class CityConnectionServiceImpl implements CityConnectionService {
 
     @Override
     public void update(CityConnection cityConnection) {
-        cityConnection.setDistance(DistanceCalculator.calculateDistance(cityConnection));
+        System.out.println("City one: " + cityConnection.getFirstCity().getX());
+        System.out.println("City two: " + cityConnection.getSecondCity().getX());
+        double distance = DistanceCalculator.calculateDistance(cityConnection);
+        System.out.println(distance);
+        cityConnection.setDistance(distance);
         cityConnectionMapper.update(cityConnection);
     }
 

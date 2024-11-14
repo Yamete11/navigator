@@ -20,6 +20,8 @@ public class Main {
         StartLocationServiceImpl startLocationService = new StartLocationServiceImpl();
         EndLocationServiceImpl endLocationService = new EndLocationServiceImpl();
 
+        /*createCity();
+        createRoute();*/
         displayWelcomeMessage();
         System.out.println(new GraphDrawer().draw());
 
@@ -288,7 +290,7 @@ public class Main {
         System.out.println("-ar : --add-route : Add a new route");
         System.out.println("-dc : --delete-city : Delete an existing city");
         System.out.println("-u  : --update-city : Update city details");
-        System.out.println("-pc : --print-cities : Print all cities");
+        System.out.println("-dm : --draw-map : Draw the whole map");
         System.out.println("-h  : --help : Show this help message");
         System.out.println("-q  : --quit : Exit the application");
     }
