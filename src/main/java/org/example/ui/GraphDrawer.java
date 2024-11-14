@@ -3,7 +3,6 @@ package org.example.ui;
 import org.example.model.City;
 import org.example.model.CityConnection;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -19,8 +18,9 @@ public class GraphDrawer {
 
     public String draw() {
         List<CityConnection> connections = navigator.findAllCityConnections();
+        GraphSet graphSet = new GraphSet(connections);
         String[][] map = initializeMap();
-        drawCitiesAndConnections(map, connections);
+        drawCitiesAndConnections(map, graphSet);
         return buildMapString(map);
     }
 
@@ -34,13 +34,9 @@ public class GraphDrawer {
         return map;
     }
 
-    private void drawCitiesAndConnections(String[][] map, List<CityConnection> connections) {
-        Set<City> cities = new HashSet<>();
-
-        for (CityConnection connection : connections) {
-            cities.add(connection.getFirstCity());
-            cities.add(connection.getSecondCity());
-        }
+    private void drawCitiesAndConnections(String[][] map, GraphSet graphSet) {
+        Set<City> cities = graphSet.getCities();
+        List<CityConnection> connections = graphSet.getConnections();
 
         for (City city : cities) {
             int x = (int) (city.getX() / 10 * (MAP_WIDTH - 1));
