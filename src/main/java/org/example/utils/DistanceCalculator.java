@@ -19,7 +19,6 @@ public class DistanceCalculator {
     }
 
     public static Double calculateDistance(CityConnection cityConnection) {
-        if (cityConnection.getDistance() != 0.0) return cityConnection.getDistance();
         City cityA = cityConnection.getFirstCity();
         City cityB = cityConnection.getSecondCity();
         return Math.sqrt(Math.pow(cityB.getX() - cityA.getX(), 2) + Math.pow(cityB.getY() - cityA.getY(), 2));
