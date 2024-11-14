@@ -60,7 +60,12 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     public void update(Route route) {
+        this.cityNavigator.setStrategy(new AStarStrategy());
+        List<RouteCity> routeCities = cityNavigator.findRoute(route.getStartLocation().getCity(), route.getEndLocation().getCity());
+        route.setTotalDistance(DistanceCalculator.calculateTotalDistance(routeCities));
         routeMapper.update(route);
+        routeCities.forEach(routeCity -> routeCity.setRoute(route));
+        routeCityService.createBatch(routeCities);
     }
 
     @Override
