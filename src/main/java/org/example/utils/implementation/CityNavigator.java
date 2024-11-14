@@ -2,7 +2,6 @@ package org.example.utils.implementation;
 
 import lombok.Setter;
 import org.example.model.City;
-import org.example.model.CityConnection;
 import org.example.model.RouteCity;
 import org.example.service.CityConnectionService;
 import org.example.service.CityService;
@@ -36,10 +35,5 @@ public class CityNavigator implements Navigator {
         City start = cityService.getCityByTitle(firstCity).get();
         City end = cityService.getCityByTitle(secondCity).get();
         return strategy.findRoute(start, end);
-    }
-
-    @Override
-    public List<CityConnection> findAllCityConnections() {
-        return cityConnectionService.findAll();
     }
 }
