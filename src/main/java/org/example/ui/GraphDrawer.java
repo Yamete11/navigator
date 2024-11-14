@@ -2,6 +2,8 @@ package org.example.ui;
 
 import org.example.model.City;
 import org.example.model.CityConnection;
+import org.example.service.CityConnectionService;
+import org.example.service.implementation.CityConnectionServiceImpl;
 
 import java.util.HashSet;
 import java.util.List;
@@ -9,16 +11,16 @@ import java.util.Set;
 
 public class GraphDrawer {
 
-    private final INavigator navigator;
+    private final CityConnectionService cityConnectionService;
     private static final int MAP_HEIGHT = 50;
     private static final int MAP_WIDTH = 50;
 
-    public GraphDrawer(INavigator navigator) {
-        this.navigator = navigator;
+    public GraphDrawer() {
+        cityConnectionService = new CityConnectionServiceImpl();
     }
 
     public String draw() {
-        List<CityConnection> connections = navigator.findAllCityConnections();
+        List<CityConnection> connections = cityConnectionService.findAll();
         String[][] map = initializeMap();
         drawCitiesAndConnections(map, connections);
         return buildMapString(map);
@@ -43,8 +45,8 @@ public class GraphDrawer {
         }
 
         for (City city : cities) {
-            int x = (int) (city.getX() / 10 * (MAP_WIDTH - 1));
-            int y = (int) (city.getY() / 10 * (MAP_HEIGHT - 1));
+            int x = (int) ((city.getX() / 10) / 10 * (MAP_WIDTH - 1));
+            int y = (int) ((city.getY()/ 10) / 10 * (MAP_HEIGHT - 1));
 
             x = Math.max(0, Math.min(MAP_WIDTH - 1, x));
             y = Math.max(0, Math.min(MAP_HEIGHT - 1, y));
@@ -56,10 +58,10 @@ public class GraphDrawer {
             City cityStart = connection.getFirstCity();
             City cityEnd = connection.getSecondCity();
 
-            int x1 = (int) (cityStart.getX() / 10 * (MAP_WIDTH - 1));
-            int y1 = (int) (cityStart.getY() / 10 * (MAP_HEIGHT - 1));
-            int x2 = (int) (cityEnd.getX() / 10 * (MAP_WIDTH - 1));
-            int y2 = (int) (cityEnd.getY() / 10 * (MAP_HEIGHT - 1));
+            int x1 = (int) ((cityStart.getX() / 10) / 10 * (MAP_WIDTH - 1));
+            int y1 = (int) ((cityStart.getY() / 10) / 10 * (MAP_HEIGHT - 1));
+            int x2 = (int) ((cityEnd.getX() / 10) / 10 * (MAP_WIDTH - 1));
+            int y2 = (int) ((cityEnd.getY() / 10) / 10 * (MAP_HEIGHT - 1));
 
             x1 = Math.max(0, Math.min(MAP_WIDTH - 1, x1));
             y1 = Math.max(0, Math.min(MAP_HEIGHT - 1, y1));

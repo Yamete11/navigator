@@ -34,13 +34,13 @@ public class RouteServiceImpl implements RouteService {
         this.cityService = new CityServiceImpl();
         this.cityConnection = new CityConnectionServiceImpl();
         this.cityNavigator = new CityNavigator();
-        this.cityNavigator.setStrategy(new AStarStrategy());
     }
 
     @Override
     public void create(Route route) {
         startLocationService.create(route.getStartLocation());
         endLocationService.create(route.getEndLocation());
+        this.cityNavigator.setStrategy(new AStarStrategy());
         List<RouteCity> routeCities = cityNavigator.findRoute(route.getStartLocation().getCity(), route.getEndLocation().getCity());
         route.setTotalDistance(DistanceCalculator.calculateTotalDistance(routeCities));
         routeMapper.create(route);
