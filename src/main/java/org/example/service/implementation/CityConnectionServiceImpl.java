@@ -35,6 +35,7 @@ public class CityConnectionServiceImpl implements CityConnectionService {
 
     @Override
     public void update(CityConnection cityConnection) {
+        cityConnection.setDistance(DistanceCalculator.calculateDistance(cityConnection));
         cityConnectionMapper.update(cityConnection);
     }
 

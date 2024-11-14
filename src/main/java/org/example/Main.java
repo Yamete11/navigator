@@ -7,6 +7,7 @@ import org.example.ui.GraphDrawer;
 import org.example.ui.NavigatorMockImpl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Main {
@@ -47,7 +48,7 @@ public class Main {
             case "-ar", "--add-route" -> handleAddRoute(routeService, cityService);
             case "-dc", "--delete-city" -> handleDeleteCity(cityService);
             case "-u", "--update-city" -> handleUpdateCity(cityService);
-            case "-pc", "--print-cities" -> cityService.findAll().forEach(System.out::println);
+            case "-dm", "--draw-map" -> new GraphDrawer().draw();
             case "-h", "--help" -> displayHelpMessage();
             case "-q", "--quit" -> {
                 isRunning = false;
@@ -118,27 +119,29 @@ public class Main {
 
             System.out.print("Enter the ID of the first city to connect: ");
             long firstCityId = Integer.parseInt(scanner.nextLine().trim());
-            City firstCity = cityService.getById(firstCityId).get();
-            if (firstCity == null) {
+            Optional<City> firstCity = cityService.getById(firstCityId);
+            if (firstCity.isEmpty()) {
                 System.err.println("City with ID " + firstCityId + " does not exist.");
                 return;
             }
 
             System.out.print("Enter the ID of the second city to connect: ");
             long secondCityId = Integer.parseInt(scanner.nextLine().trim());
-            City secondCity = cityService.getById(secondCityId).get();
-            if (secondCity == null) {
+            Optional<City> secondCity = cityService.getById(secondCityId);
+            if (secondCity.isEmpty()) {
                 System.err.println("City with ID " + secondCityId + " does not exist.");
                 return;
             }
 
             CityConnection connection1 = new CityConnection();
             connection1.setFirstCity(city);
-            connection1.setSecondCity(firstCity);
+            connection1.setSecondCity(firstCity.get());
+            connection1.setDistance(0.0d);
 
             CityConnection connection2 = new CityConnection();
             connection2.setFirstCity(city);
-            connection2.setSecondCity(secondCity);
+            connection2.setSecondCity(secondCity.get());
+            connection2.setDistance(0.0d);
 
 
             cityConnectionService.create(connection1);
@@ -162,14 +165,117 @@ public class Main {
     }
 
     private static void handleDeleteCity(CityServiceImpl cityService) {
-        // Implement the logic to delete a city
-        System.out.println("City deleted");
+        Scanner scanner = new Scanner(System.in);
+
+        List<City> cities = cityService.findAll();
+
+        if (cities.isEmpty()) {
+            System.out.println("No cities available to delete");
+            return;
+        }
+
+        System.out.println("Available cities:");
+        for (City city : cities) {
+            System.out.println(city.getId() + ": " + city.getTitle());
+        }
+
+        System.out.print("Enter the ID of the city you want to delete: ");
+        long cityId;
+        try {
+            cityId = Integer.parseInt(scanner.nextLine().trim());
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid input. City ID must be a number");
+            return;
+        }
+
+        Optional<City> cityToDelete = cityService.getById(cityId);
+        if (cityToDelete.isEmpty()) {
+            System.err.println("City with ID " + cityId + " does not exist.");
+            return;
+        }
+
+        try {
+            cityService.deleteById(cityToDelete.get().getId());
+            System.out.println("City deleted successfully: " + cityToDelete);
+        } catch (Exception e) {
+            System.err.println("Error deleting city: " + e.getMessage());
+        }
     }
 
+
     private static void handleUpdateCity(CityServiceImpl cityService) {
-        // Implement the logic to update a city
-        System.out.println("City updated");
+        Scanner scanner = new Scanner(System.in);
+
+        List<City> cities = cityService.findAll();
+
+        if (cities.isEmpty()) {
+            System.out.println("No cities available to update.");
+            return;
+        }
+
+        System.out.println("Available cities:");
+        for (City city : cities) {
+            System.out.println(city.getId() + ": " + city.getTitle());
+        }
+
+        System.out.print("Enter the ID of the city you want to update: ");
+        long cityId;
+        try {
+            cityId = Integer.parseInt(scanner.nextLine().trim());
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid input. City ID must be a number.");
+            return;
+        }
+
+        Optional<City> cityToUpdate = cityService.getById(cityId);
+        if (cityToUpdate.isEmpty()) {
+            System.err.println("City with ID " + cityId + " does not exist.");
+            return;
+        }
+        City city = cityToUpdate.get();
+
+        String title;
+        while (true) {
+            System.out.print("Enter new city name (1 character): ");
+            title = scanner.nextLine().trim();
+            if (title.length() == 1) {
+                break;
+            } else {
+                System.err.println("City name must be exactly one character.");
+            }
+        }
+        city.setTitle(title);
+
+        double x = 0.0, y = 0.0;
+        try {
+            System.out.print("Enter new x coordinate (1.0-95.0): ");
+            x = Double.parseDouble(scanner.nextLine().trim());
+
+            System.out.print("Enter new y coordinate (1.0-95.0): ");
+            y = Double.parseDouble(scanner.nextLine().trim());
+
+            if (x < 1.0 || x > 95.0 || y < 1.0 || y > 95.0) {
+                throw new IllegalArgumentException("Coordinates are out of bounds. x and y should be between 1.0 and 95.0.");
+            }
+
+            city.setX(x);
+            city.setY(y);
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid input. Coordinates must be numbers.");
+            return;
+        } catch (IllegalArgumentException e) {
+            System.err.println(e.getMessage());
+            return;
+        }
+
+        try {
+            cityService.update(city);
+            System.out.println("City updated successfully: " + cityToUpdate);
+        } catch (Exception e) {
+            System.err.println("Error updating city: " + e.getMessage());
+        }
     }
+
 
     private static void displayWelcomeMessage() {
         System.out.println("========================== Navigator Application ==========================");
