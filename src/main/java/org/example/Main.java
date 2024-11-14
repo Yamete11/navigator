@@ -13,26 +13,58 @@ public class Main {
         StartLocationServiceImpl startLocationService = new StartLocationServiceImpl();
         EndLocationServiceImpl endLocationService = new EndLocationServiceImpl();
 
+        createCity();
+        createRoute();
 
-        Main.createCity();
 
-
-/*      cityService.findAll().forEach(System.out::println);
+        cityService.findAll().forEach(System.out::println);
         cityConnectionService.findAll().forEach(System.out::println);
         routeService.findAll().forEach(System.out::println);
         routeCityService.findAll().forEach(System.out::println);
         startLocationService.findAll().forEach(System.out::println);
-        endLocationService.findAll().forEach(System.out::println);*/
+        endLocationService.findAll().forEach(System.out::println);
 
 
 
     }
 
-    public static void createCity(){
-        RouteCityServiceImpl routeCityService = new RouteCityServiceImpl();
+    public static void createRoute(){
         RouteServiceImpl routeService = new RouteServiceImpl();
-        StartLocationServiceImpl startLocationService = new StartLocationServiceImpl();
-        EndLocationServiceImpl endLocationService = new EndLocationServiceImpl();
+        CityServiceImpl cityService = new CityServiceImpl();
+        CityLogger cityLogger = new CityLogger();
+        cityService.addObserver(cityLogger);
+
+        StartLocation startLocation1 = new StartLocation();
+        startLocation1.setCity(cityService.getById(1L).get());
+        StartLocation startLocation2 = new StartLocation();
+        startLocation2.setCity(cityService.getById(7L).get());
+        StartLocation startLocation3 = new StartLocation();
+        startLocation3.setCity(cityService.getById(2L).get());
+
+        EndLocation endLocation1 = new EndLocation();
+        endLocation1.setCity(cityService.getById(5L).get());
+        EndLocation endLocation2 = new EndLocation();
+        endLocation2.setCity(cityService.getById(6L).get());
+        EndLocation endLocation3 = new EndLocation();
+        endLocation3.setCity(cityService.getById(3L).get());
+
+        Route route1 = new Route();
+        route1.setStartLocation(startLocation1);
+        route1.setEndLocation(endLocation1);
+        Route route2 = new Route();
+        route2.setStartLocation(startLocation2);
+        route2.setEndLocation(endLocation2);
+        Route route3 = new Route();
+        route3.setStartLocation(startLocation3);
+        route3.setEndLocation(endLocation3);
+
+        routeService.create(route1);
+        routeService.create(route2);
+        routeService.create(route3);
+    }
+
+
+    public static void createCity(){
         CityServiceImpl cityService = new CityServiceImpl();
         CityConnectionServiceImpl cityConnectionService = new CityConnectionServiceImpl();
         CityLogger cityLogger = new CityLogger();
@@ -79,30 +111,47 @@ public class Main {
         CityConnection cityConnection1 = new CityConnection();
         cityConnection1.setFirstCity(city1);
         cityConnection1.setSecondCity(city7);
+        cityConnection1.setDistance(0.0);
         CityConnection cityConnection2 = new CityConnection();
         cityConnection2.setFirstCity(city1);
         cityConnection2.setSecondCity(city3);
+        cityConnection2.setDistance(0.0);
+
         CityConnection cityConnection3 = new CityConnection();
         cityConnection3.setFirstCity(city7);
         cityConnection3.setSecondCity(city5);
+        cityConnection3.setDistance(0.0);
+
         CityConnection cityConnection4 = new CityConnection();
         cityConnection4.setFirstCity(city3);
         cityConnection4.setSecondCity(city5);
+        cityConnection4.setDistance(0.0);
+
         CityConnection cityConnection5 = new CityConnection();
         cityConnection5.setFirstCity(city3);
         cityConnection5.setSecondCity(city4);
+        cityConnection5.setDistance(0.0);
+
         CityConnection cityConnection6 = new CityConnection();
         cityConnection6.setFirstCity(city5);
         cityConnection6.setSecondCity(city6);
+        cityConnection6.setDistance(0.0);
+
         CityConnection cityConnection7 = new CityConnection();
         cityConnection7.setFirstCity(city4);
         cityConnection7.setSecondCity(city6);
+        cityConnection7.setDistance(0.0);
+
         CityConnection cityConnection8 = new CityConnection();
         cityConnection8.setFirstCity(city4);
         cityConnection8.setSecondCity(city2);
+        cityConnection8.setDistance(0.0);
+
         CityConnection cityConnection9 = new CityConnection();
         cityConnection9.setFirstCity(city2);
         cityConnection9.setSecondCity(city6);
+        cityConnection9.setDistance(0.0);
+
 
         cityConnectionService.create(cityConnection1);
         cityConnectionService.create(cityConnection2);
@@ -113,86 +162,5 @@ public class Main {
         cityConnectionService.create(cityConnection7);
         cityConnectionService.create(cityConnection8);
         cityConnectionService.create(cityConnection9);
-
-        StartLocation startLocation1 = new StartLocation();
-        startLocation1.setCity(city1);
-        StartLocation startLocation2 = new StartLocation();
-        startLocation2.setCity(city7);
-        StartLocation startLocation3 = new StartLocation();
-        startLocation3.setCity(city2);
-
-        EndLocation endLocation1 = new EndLocation();
-        endLocation1.setCity(city5);
-        EndLocation endLocation2 = new EndLocation();
-        endLocation2.setCity(city6);
-        EndLocation endLocation3 = new EndLocation();
-        endLocation3.setCity(city3);
-
-        Route route1 = new Route();
-        route1.setStartLocation(startLocation1);
-        route1.setEndLocation(endLocation1);
-        route1.setTotalDistance(50.0);
-        Route route2 = new Route();
-        route2.setStartLocation(startLocation2);
-        route2.setEndLocation(endLocation2);
-        route2.setTotalDistance(70.0);
-        Route route3 = new Route();
-        route3.setStartLocation(startLocation3);
-        route3.setEndLocation(endLocation3);
-        route3.setTotalDistance(90.0);
-
-        routeService.create(route1);
-        routeService.create(route2);
-        routeService.create(route3);
-
-        RouteCity routeCity1 = new RouteCity();
-        routeCity1.setRoute(route1);
-        routeCity1.setCity(city1);
-        routeCity1.setOrderIndex(1L);
-        RouteCity routeCity2 = new RouteCity();
-        routeCity2.setRoute(route1);
-        routeCity2.setCity(city3);
-        routeCity2.setOrderIndex(2L);
-        RouteCity routeCity3 = new RouteCity();
-        routeCity3.setRoute(route1);
-        routeCity3.setCity(city5);
-        routeCity3.setOrderIndex(3L);
-
-
-        RouteCity routeCity4 = new RouteCity();
-        routeCity4.setRoute(route2);
-        routeCity4.setCity(city7);
-        routeCity4.setOrderIndex(1L);
-        RouteCity routeCity5 = new RouteCity();
-        routeCity5.setRoute(route2);
-        routeCity5.setCity(city5);
-        routeCity5.setOrderIndex(2L);
-        RouteCity routeCity6 = new RouteCity();
-        routeCity6.setRoute(route2);
-        routeCity6.setCity(city6);
-        routeCity6.setOrderIndex(3L);
-
-        RouteCity routeCity7 = new RouteCity();
-        routeCity7.setRoute(route3);
-        routeCity7.setCity(city2);
-        routeCity7.setOrderIndex(1L);
-        RouteCity routeCity8 = new RouteCity();
-        routeCity8.setRoute(route3);
-        routeCity8.setCity(city4);
-        routeCity8.setOrderIndex(2L);
-        RouteCity routeCity9 = new RouteCity();
-        routeCity9.setRoute(route3);
-        routeCity9.setCity(city3);
-        routeCity9.setOrderIndex(3L);
-
-        routeCityService.create(routeCity1);
-        routeCityService.create(routeCity2);
-        routeCityService.create(routeCity3);
-        routeCityService.create(routeCity4);
-        routeCityService.create(routeCity5);
-        routeCityService.create(routeCity6);
-        routeCityService.create(routeCity7);
-        routeCityService.create(routeCity8);
-        routeCityService.create(routeCity9);
     }
 }
