@@ -3,6 +3,7 @@ package org.example.service.implementation;
 import org.example.dao.CityMapper;
 import org.example.dao.implementation.CityMapperImpl;
 import org.example.model.City;
+import org.example.model.CityConnection;
 import org.example.model.Route;
 import org.example.service.CityService;
 import org.example.service.observer.CityEventType;
@@ -51,6 +52,10 @@ public class CityServiceImpl implements CityService, Observable {
     @Override
     public void update(City city) {
         cityMapper.update(city);
+        List<CityConnection> connections = cityConnectionService.getCityConnectionsByCityId(city.getId());
+        for(CityConnection connection : connections){
+            cityConnectionService.update(connection);
+        }
         notifyObservers(CityEventType.CITY_UPDATED, city);
     }
 
