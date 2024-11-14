@@ -2,7 +2,9 @@ package org.example.utils;
 
 import org.example.model.City;
 import org.example.model.CityConnection;
+import org.example.model.RouteCity;
 
+import java.util.List;
 import java.util.Optional;
 
 public class DistanceCalculator {
@@ -17,8 +19,17 @@ public class DistanceCalculator {
     }
 
     public static Double calculateDistance(CityConnection cityConnection) {
+        if (cityConnection.getDistance() != 0.0) return cityConnection.getDistance();
         City cityA = cityConnection.getFirstCity();
         City cityB = cityConnection.getSecondCity();
         return Math.sqrt(Math.pow(cityB.getX() - cityA.getX(), 2) + Math.pow(cityB.getY() - cityA.getY(), 2));
+    }
+
+    public static Double calculateTotalDistance(List<RouteCity> cities) {
+        double result = 0.0d;
+        for (int i = 0; i < cities.size() - 1; i++) {
+            result += calculateDistance(cities.get(i).getCity(), cities.get(i + 1).getCity());
+        }
+        return result;
     }
 }
