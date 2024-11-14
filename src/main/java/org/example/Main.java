@@ -3,8 +3,14 @@ package org.example;
 import org.example.model.*;
 import org.example.service.implementation.*;
 import org.example.service.observer.CityLogger;
+import org.example.ui.GraphDrawer;
+import org.example.ui.NavigatorMockImpl;
+
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
+    private static boolean isRunning = true;
     public static void main(String[] args) {
         CityServiceImpl cityService = new CityServiceImpl();
         CityConnectionServiceImpl cityConnectionService = new CityConnectionServiceImpl();
@@ -13,19 +19,172 @@ public class Main {
         StartLocationServiceImpl startLocationService = new StartLocationServiceImpl();
         EndLocationServiceImpl endLocationService = new EndLocationServiceImpl();
 
-        createCity();
-        createRoute();
+        displayWelcomeMessage();
+        System.out.println(new GraphDrawer().draw());
+
+        Scanner scanner = new Scanner(System.in);
+
+        while (isRunning) {
+            System.out.print("Enter command: ");
+            String command = scanner.nextLine().trim();
+            handleCommand(command, cityService, cityConnectionService, routeService);
+        }
+
+        scanner.close();
 
 
-        cityService.findAll().forEach(System.out::println);
-        cityConnectionService.findAll().forEach(System.out::println);
-        routeService.findAll().forEach(System.out::println);
-        routeCityService.findAll().forEach(System.out::println);
-        startLocationService.findAll().forEach(System.out::println);
-        endLocationService.findAll().forEach(System.out::println);
+
+    }
+
+    //- create City - insert city_connection
+    //- create Route - provide start and end City
+    //- delete city
+    //- update city
+
+    private static void handleCommand(String command, CityServiceImpl cityService, CityConnectionServiceImpl cityConnectionService, RouteServiceImpl routeService) {
+        switch (command) {
+            case "-ac", "--add-city" -> handleAddCity(cityService);
+            case "-ar", "--add-route" -> handleAddRoute(routeService, cityService);
+            case "-dc", "--delete-city" -> handleDeleteCity(cityService);
+            case "-u", "--update-city" -> handleUpdateCity(cityService);
+            case "-pc", "--print-cities" -> cityService.findAll().forEach(System.out::println);
+            case "-h", "--help" -> displayHelpMessage();
+            case "-q", "--quit" -> {
+                isRunning = false;
+                System.out.println("Exiting the Navigator application.");
+            }
+            default -> System.out.println("Unknown command: " + command);
+        }
+    }
+
+    private static void handleAddCity(CityServiceImpl cityService) {
+        CityConnectionServiceImpl cityConnectionService = new CityConnectionServiceImpl();
+        Scanner scanner = new Scanner(System.in);
+
+        List<City> cityList = cityService.findAll();
+
+        String title;
+        while (true) {
+            System.out.print("Enter city name (1 character): ");
+            title = scanner.nextLine().trim();
+            if (title.length() == 1) {
+                break;
+            } else {
+                System.err.println("Invalid input. City name must be exactly one character.");
+            }
+        }
+
+        double x = 0.0, y = 0.0;
+        try {
+            System.out.print("Enter x coordinate (1.0-95.0): ");
+            x = Double.parseDouble(scanner.nextLine().trim());
+
+            System.out.print("Enter y coordinate (1.0-95.0): ");
+            y = Double.parseDouble(scanner.nextLine().trim());
+
+            if (x < 1.0 || x > 95.0 || y < 1.0 || y > 95.0) {
+                throw new IllegalArgumentException("Coordinates are out of bounds. x and y should be between 1.0 and 95.0.");
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid input. Coordinates must be numbers.");
+            return;
+        } catch (IllegalArgumentException e) {
+            System.err.println(e.getMessage());
+            return;
+        }
+
+        City city = new City();
+        city.setTitle(title);
+        city.setX(x);
+        city.setY(y);
+
+        try {
+            cityService.create(city);
+            System.out.println("City added successfully: " + city);
+        } catch (Exception e) {
+            System.err.println("Error adding city: " + e.getMessage());
+            return;
+        }
+
+        try {
+            System.out.println("Choose two cities to connect the new city with:");
+
+            System.out.println("Available cities:");
+            for (City c : cityList) {
+                if (!c.getTitle().equals(city.getTitle())) {
+                    System.out.println(c.getId() + ": " + c.getTitle());
+                }
+            }
+
+            System.out.print("Enter the ID of the first city to connect: ");
+            long firstCityId = Integer.parseInt(scanner.nextLine().trim());
+            City firstCity = cityService.getById(firstCityId).get();
+            if (firstCity == null) {
+                System.err.println("City with ID " + firstCityId + " does not exist.");
+                return;
+            }
+
+            System.out.print("Enter the ID of the second city to connect: ");
+            long secondCityId = Integer.parseInt(scanner.nextLine().trim());
+            City secondCity = cityService.getById(secondCityId).get();
+            if (secondCity == null) {
+                System.err.println("City with ID " + secondCityId + " does not exist.");
+                return;
+            }
+
+            CityConnection connection1 = new CityConnection();
+            connection1.setFirstCity(city);
+            connection1.setSecondCity(firstCity);
+
+            CityConnection connection2 = new CityConnection();
+            connection2.setFirstCity(city);
+            connection2.setSecondCity(secondCity);
+
+
+            cityConnectionService.create(connection1);
+            cityConnectionService.create(connection2);
+
+            System.out.println("City successfully connected to cities with IDs " + firstCityId + " and " + secondCityId + ".");
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid input. City IDs must be numbers.");
+        } catch (Exception e) {
+            System.err.println("Error connecting cities: " + e.getMessage());
+        }
+    }
 
 
 
+
+
+    private static void handleAddRoute(RouteServiceImpl routeService, CityServiceImpl cityService) {
+        // Implement the logic to add a route
+        System.out.println("Route added");
+    }
+
+    private static void handleDeleteCity(CityServiceImpl cityService) {
+        // Implement the logic to delete a city
+        System.out.println("City deleted");
+    }
+
+    private static void handleUpdateCity(CityServiceImpl cityService) {
+        // Implement the logic to update a city
+        System.out.println("City updated");
+    }
+
+    private static void displayWelcomeMessage() {
+        System.out.println("========================== Navigator Application ==========================");
+        System.out.println("Welcome to the Navigator application! You can manage cities and routes, find optimal paths, and view city maps.");
+        displayHelpMessage();
+    }
+    private static void displayHelpMessage() {
+        System.out.println("Available Commands:");
+        System.out.println("-ac : --add-city : Add a new city");
+        System.out.println("-ar : --add-route : Add a new route");
+        System.out.println("-dc : --delete-city : Delete an existing city");
+        System.out.println("-u  : --update-city : Update city details");
+        System.out.println("-pc : --print-cities : Print all cities");
+        System.out.println("-h  : --help : Show this help message");
+        System.out.println("-q  : --quit : Exit the application");
     }
 
     public static void createRoute(){
@@ -71,31 +230,31 @@ public class Main {
         cityService.addObserver(cityLogger);
 
         City city1 = new City();
-        city1.setTitle("CityA");
+        city1.setTitle("A");
         city1.setX(10.0);
         city1.setY(5.0);
         City city2 = new City();
-        city2.setTitle("CityB");
+        city2.setTitle("B");
         city2.setX(95.0);
         city2.setY(2.0);
         City city3 = new City();
-        city3.setTitle("CityC");
+        city3.setTitle("C");
         city3.setX(20.0);
         city3.setY(15.0);
         City city4 = new City();
-        city4.setTitle("CityD");
+        city4.setTitle("D");
         city4.setX(75.0);
         city4.setY(10.0);
         City city5 = new City();
-        city5.setTitle("CityE");
+        city5.setTitle("E");
         city5.setX(50.0);
         city5.setY(25.0);
         City city6 = new City();
-        city6.setTitle("CityF");
+        city6.setTitle("F");
         city6.setX(90.0);
         city6.setY(18.0);
         City city7 = new City();
-        city7.setTitle("CityG");
+        city7.setTitle("G");
         city7.setX(5.0);
         city7.setY(28.0);
 
