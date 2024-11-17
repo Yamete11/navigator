@@ -5,6 +5,7 @@ import org.example.model.CityConnection;
 import org.example.service.CityConnectionService;
 import org.example.service.implementation.CityConnectionServiceImpl;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -20,9 +21,8 @@ public class GraphDrawer {
 
     public String draw() {
         List<CityConnection> connections = cityConnectionService.findAll();
-
         String[][] map = initializeMap();
-        drawCitiesAndConnections(map, graphSet);
+        drawCitiesAndConnections(map, connections);
         return buildMapString(map);
     }
 
@@ -36,9 +36,12 @@ public class GraphDrawer {
         return map;
     }
 
-    private void drawCitiesAndConnections(String[][] map, GraphSet graphSet) {
-        Set<City> cities = graphSet.getCities();
-        List<CityConnection> connections = graphSet.getConnections();
+    private void drawCitiesAndConnections(String[][] map, List<CityConnection> connections) {
+        Set<City> cities = new HashSet<>();
+        for (CityConnection connection : connections) {
+            cities.add(connection.getFirstCity());
+            cities.add(connection.getSecondCity());
+        }
 
         for (City city : cities) {
             int x = (int) ((city.getX() / 10) / 10 * (MAP_WIDTH - 1));

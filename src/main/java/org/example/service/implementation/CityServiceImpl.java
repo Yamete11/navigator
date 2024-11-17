@@ -38,8 +38,13 @@ public class CityServiceImpl implements CityService, Observable {
 
     @Override
     public void create(City city) {
-        cityMapper.create(city);
-        notifyObservers(CityEventType.CITY_ADDED, city);
+        try {
+            cityMapper.create(city);
+            notifyObservers(CityEventType.CITY_ADDED, city);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Validation failed: " + e.getMessage(), e);
+        }
+
     }
 
     @Override
@@ -54,20 +59,37 @@ public class CityServiceImpl implements CityService, Observable {
 
     @Override
     public void update(City city) {
-        cityMapper.update(city);
-        List<CityConnection> connections = cityConnectionService.getCityConnectionsByCityId(city.getId());
-        for(CityConnection connection : connections){
-            cityConnectionService.update(connection);
+        Optional<City> optionalCity = cityMapper.getById(city.getId());
+        if (optionalCity.isPresent()) {
+            City existingCity = optionalCity.get();
+
+            boolean coordinatesChanged =
+                    existingCity.getX() != city.getX() || existingCity.getY() != city.getY();
+
+            try {
+                cityMapper.update(city);
+                notifyObservers(CityEventType.CITY_UPDATED, city);
+
+                if (coordinatesChanged) {
+                    List<CityConnection> connections = cityConnectionService.getCityConnectionsByCityId(city.getId());
+                    for (CityConnection connection : connections) {
+                        cityConnectionService.update(connection);
+                    }
+
+                    List<Route> routeList = getRouteService().findAll();
+                    for (Route route : routeList) {
+                        routeCityService.deleteByRouteId(route.getId());
+                    }
+                    for (Route route : routeList) {
+                        getRouteService().update(route);
+                    }
+                }
+            } catch (IllegalArgumentException e) {
+                throw new RuntimeException("Validation failed: " + e.getMessage(), e);
+            }
         }
-        List<Route> routeList = getRouteService().findAll();
-        for(Route route : routeList){
-            routeCityService.deleteByRouteId(route.getId());
-        }
-        for(Route route : routeList){
-            getRouteService().update(route);
-        }
-        notifyObservers(CityEventType.CITY_UPDATED, city);
     }
+
 
     @Override
     public void deleteById(Long id) {

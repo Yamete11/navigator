@@ -78,7 +78,6 @@ public interface RouteMapper extends GenericDao<Route> {
     @Delete("DELETE FROM Routes WHERE route_id = #{id}")
     void deleteById(Long id);
 
-
     @Select("SELECT r.route_id AS id, r.total_distance, " +
             "sl.start_location_id AS start_location_id, sl.city_id AS start_city_id, c1.title AS start_city_title, c1.x AS start_x, c1.y AS start_y, " +
             "el.end_location_id AS end_location_id, el.city_id AS end_city_id, c2.title AS end_city_title, c2.x AS end_x, c2.y AS end_y " +
@@ -102,5 +101,25 @@ public interface RouteMapper extends GenericDao<Route> {
             @Result(property = "endLocation.city.x", column = "end_x"),
             @Result(property = "endLocation.city.y", column = "end_y")
     })
-    List<Route> getRoutesByCityId(Long cityId);
+    List<Route> getRoutesByCityId(@Param("cityId") Long cityId);
+
+    @Select("SELECT r.route_id AS id, r.total_distance, " +
+            "sl.start_location_id AS start_location_id, sl.city_id AS start_city_id, c1.title AS start_city_title, c1.x AS start_x, c1.y AS start_y, " +
+            "el.end_location_id AS end_location_id, el.city_id AS end_city_id, c2.title AS end_city_title, c2.x AS end_x, c2.y AS end_y " +
+            "FROM Routes r " +
+            "JOIN start_locations sl ON r.start_location_id = sl.start_location_id " +
+            "JOIN cities c1 ON sl.city_id = c1.city_id " +
+            "JOIN end_locations el ON r.end_location_id = el.end_location_id " +
+            "JOIN cities c2 ON el.city_id = c2.city_id " +
+            "WHERE (sl.city_id = #{city1Id} AND el.city_id = #{city2Id}) " +
+            "OR (sl.city_id = #{city2Id} AND el.city_id = #{city1Id})")
+    Route checkIfRouteExists(@Param("city1Id") Long city1Id, @Param("city2Id") Long city2Id);
+
+    @Select("SELECT c.city_id " +
+            "FROM route_cities rc " +
+            "JOIN cities c ON rc.city_id = c.city_id " +
+            "WHERE rc.route_id = #{routeId}")
+    List<Long> getCityIdsByRouteId(@Param("routeId") Long routeId);
+
+
 }
