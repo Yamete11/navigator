@@ -2,25 +2,32 @@ package org.example.ui;
 
 import org.example.model.City;
 import org.example.model.CityConnection;
-import org.example.service.CityConnectionService;
-import org.example.service.implementation.CityConnectionServiceImpl;
 
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 public class GraphDrawer {
 
-    private final CityConnectionService cityConnectionService;
-    private static final int MAP_HEIGHT = 50;
-    private static final int MAP_WIDTH = 50;
+    GraphSet graphSet;
+    private static final int MAP_HEIGHT = 40;
+    private static final int MAP_WIDTH = 40; // line has 80 characters
 
-    public GraphDrawer() {
-        cityConnectionService = new CityConnectionServiceImpl();
+    public GraphDrawer(INavigator navigator) {
+        this.graphSet = new GraphSet(navigator);
+    }
+
+    private Set<City> getUniqueCities(Set<CityConnection> uniqueCityConnections) {
+        Set<City> uniqueCities = new HashSet<>();
+
+        for (CityConnection connection : uniqueCityConnections) {
+            uniqueCities.add(connection.getFirstCity());
+            uniqueCities.add(connection.getSecondCity());
+        }
+
+        return uniqueCities;
     }
 
     public String draw() {
-        List<CityConnection> connections = cityConnectionService.findAll();
-
         String[][] map = initializeMap();
         drawCitiesAndConnections(map, graphSet);
         return buildMapString(map);
@@ -37,12 +44,12 @@ public class GraphDrawer {
     }
 
     private void drawCitiesAndConnections(String[][] map, GraphSet graphSet) {
-        Set<City> cities = graphSet.getCities();
-        List<CityConnection> connections = graphSet.getConnections();
+        Set<CityConnection> connections = graphSet.getUniqueCityConnections();
+        Set<City> cities = getUniqueCities(connections);
 
         for (City city : cities) {
-            int x = (int) ((city.getX() / 10) / 10 * (MAP_WIDTH - 1));
-            int y = (int) ((city.getY()/ 10) / 10 * (MAP_HEIGHT - 1));
+            int x = (int) ((city.getX() / 1) / 10 * (MAP_WIDTH - 1));
+            int y = (int) ((city.getY()/ 1) / 10 * (MAP_HEIGHT - 1));
 
             x = Math.max(0, Math.min(MAP_WIDTH - 1, x));
             y = Math.max(0, Math.min(MAP_HEIGHT - 1, y));
@@ -54,10 +61,10 @@ public class GraphDrawer {
             City cityStart = connection.getFirstCity();
             City cityEnd = connection.getSecondCity();
 
-            int x1 = (int) ((cityStart.getX() / 10) / 10 * (MAP_WIDTH - 1));
-            int y1 = (int) ((cityStart.getY() / 10) / 10 * (MAP_HEIGHT - 1));
-            int x2 = (int) ((cityEnd.getX() / 10) / 10 * (MAP_WIDTH - 1));
-            int y2 = (int) ((cityEnd.getY() / 10) / 10 * (MAP_HEIGHT - 1));
+            int x1 = (int) ((cityStart.getX() / 1) / 10 * (MAP_WIDTH - 1));
+            int y1 = (int) ((cityStart.getY() / 1) / 10 * (MAP_HEIGHT - 1));
+            int x2 = (int) ((cityEnd.getX() / 1) / 10 * (MAP_WIDTH - 1));
+            int y2 = (int) ((cityEnd.getY() / 1) / 10 * (MAP_HEIGHT - 1));
 
             x1 = Math.max(0, Math.min(MAP_WIDTH - 1, x1));
             y1 = Math.max(0, Math.min(MAP_HEIGHT - 1, y1));
@@ -104,13 +111,13 @@ public class GraphDrawer {
     }
 
     private void appendTopBorder(StringBuilder sb) {
-        sb.append("# ".repeat(MAP_WIDTH + 2));
-        sb.append("\n");
+        sb.append("# ".repeat(MAP_WIDTH + 1));
+        sb.append("#\n");
     }
 
     private void appendBottomBorder(StringBuilder sb) {
-        sb.append("# ".repeat(MAP_WIDTH + 2));
-        sb.append("\n");
+        sb.append("# ".repeat(MAP_WIDTH + 1));
+        sb.append("#\n");
     }
 
     private void appendMapContent(StringBuilder sb, String[][] map) {
@@ -119,7 +126,7 @@ public class GraphDrawer {
             for (int j = 0; j < MAP_WIDTH; j++) {
                 sb.append(map[i][j]);
             }
-            sb.append("# \n");
+            sb.append("#\n");
         }
     }
 }

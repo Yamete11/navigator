@@ -19,37 +19,5 @@ public interface ICityConnectionChecker {
         uniqueId.add(c2.getSecondCity().getId());
         return uniqueId.size()==2;
     }
-
-    default boolean compareConnectionId(CityConnection c1, CityConnection c2) {
-        boolean containsFirstCity =
-                c2.getFirstCity().getId().equals(c1.getFirstCity().getId()) ||
-                        c2.getFirstCity().getId().equals(c1.getSecondCity().getId());
-
-        boolean containsSecondCity =
-                c2.getSecondCity().getId().equals(c1.getFirstCity().getId()) ||
-                        c2.getSecondCity().getId().equals(c1.getSecondCity().getId());
-
-        return (containsFirstCity && containsSecondCity);
-    }
-
-    default boolean compareConnectionXY(CityConnection c1, CityConnection c2) {
-        boolean containsFirstCityX =
-                c2.getFirstCity().getX().equals(c1.getFirstCity().getX()) ||
-                        c2.getFirstCity().getX().equals(c1.getSecondCity().getX());
-
-        boolean containsFirstCityY =
-                c2.getFirstCity().getY().equals(c1.getFirstCity().getY()) ||
-                        c2.getFirstCity().getY().equals(c1.getSecondCity().getY());
-
-        boolean containsSecondCityX =
-                c2.getSecondCity().getX().equals(c1.getFirstCity().getX()) ||
-                        c2.getSecondCity().getX().equals(c1.getSecondCity().getX());
-
-        boolean containsSecondCityY =
-                c2.getSecondCity().getY().equals(c1.getFirstCity().getY()) ||
-                        c2.getSecondCity().getY().equals(c1.getSecondCity().getY());
-
-        return ((containsFirstCityX && containsFirstCityY) && (containsSecondCityX && containsSecondCityY));
-    }
 }
 

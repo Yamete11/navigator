@@ -23,7 +23,7 @@ public class Main {
         /*createCity();
         createRoute();*/
         displayWelcomeMessage();
-        System.out.println(new GraphDrawer().draw());
+        //System.out.println(new GraphDrawer().draw());
 
         Scanner scanner = new Scanner(System.in);
 
@@ -50,7 +50,7 @@ public class Main {
             case "-ar", "--add-route" -> handleAddRoute(routeService, cityService);
             case "-dc", "--delete-city" -> handleDeleteCity(cityService);
             case "-u", "--update-city" -> handleUpdateCity(cityService);
-            case "-dm", "--draw-map" -> new GraphDrawer().draw();
+            //case "-dm", "--draw-map" -> new GraphDrawer().draw();
             case "-h", "--help" -> displayHelpMessage();
             case "-q", "--quit" -> {
                 isRunning = false;

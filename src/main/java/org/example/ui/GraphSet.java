@@ -3,20 +3,17 @@ package org.example.ui;
 import org.example.model.City;
 import org.example.model.CityConnection;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
 public class GraphSet implements ICityConnectionChecker{
 
-    private List<CityConnection> connections;
-    private final Set<City> uniqCities;
     private final Set<CityConnection> uniqueCityConnections;
 
     public GraphSet(INavigator navigator) {
-        this.connections = navigator.findAllCityConnections();
-        this.uniqueCityConnections = uniqueCityConnection(connections);
-        this.uniqCities = Set.of();
+        this.uniqueCityConnections = uniqueCityConnection(navigator.findAllCityConnections());
     }
 
     public Set<CityConnection> uniqueCityConnection(List<CityConnection> connections) {
@@ -26,22 +23,7 @@ public class GraphSet implements ICityConnectionChecker{
         return uniqueCityConnections;
     }
 
-    public Set<City> getUniqueCities() {
-        return uniqCities;
-    }
-
-    public static void main(String[] args) {
-        INavigator navigator = new NavigatorMockImpl();
-        GraphSet graphSet = new GraphSet(navigator);
-
-        System.out.println("Unikalne połączenia:");
-        for (CityConnection connection : graphSet.uniqueCityConnections) {
-            System.out.println(connection);
-        }
-
-        System.out.println("Unikalne miasta:");
-        for (City city : graphSet.getUniqueCities()) {
-            System.out.println(city);
-        }
+    public Set<CityConnection> getUniqueCityConnections() {
+        return new HashSet<CityConnection>(uniqueCityConnections);
     }
 }
