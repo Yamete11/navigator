@@ -209,9 +209,10 @@ public class Main {
 
         System.out.println("Cities selected: " + cityService.getById(cityId1).get().getTitle() + " and " + cityService.getById(cityId2).get().getTitle());
 
+        GraphDrawer graphDrawer = new GraphDrawer();
         Route existingRoute = routeService.checkIfRouteExists(cityId1, cityId2);
         if (existingRoute != null) {
-            routeService.getCityConnectionsByRouteId(existingRoute.getId()).forEach(System.out::println);
+            System.out.println(graphDrawer.drawRoute(routeService.getCityConnectionsByRouteId(existingRoute.getId())));
             System.out.println("A route already exists between these two cities.");
             return;
         }
@@ -229,7 +230,7 @@ public class Main {
 
         routeService.create(route);
 
-        routeService.getCityConnectionsByRouteId(route.getId()).forEach(System.out::println);
+        System.out.println(graphDrawer.drawRoute(routeService.getCityConnectionsByRouteId(route.getId())));
 
         System.out.println("Route added successfully!");
     }
