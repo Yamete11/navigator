@@ -50,4 +50,14 @@ public interface CityMapper extends GenericDao<City>{
             @Result(property = "y", column = "y")
     })
     Optional<City> getByTitle(String title);
+
+
+    @Select("SELECT c.city_id, c.title, c.x, c.y FROM cities c WHERE c.x = #{x} AND c.y = #{y}")
+    @Results({
+            @Result(property = "id", column = "city_id"),
+            @Result(property = "title", column = "title"),
+            @Result(property = "x", column = "x"),
+            @Result(property = "y", column = "y")
+    })
+    Optional<City> getByCoordinates(@Param("x") double x, @Param("y") double y);
 }

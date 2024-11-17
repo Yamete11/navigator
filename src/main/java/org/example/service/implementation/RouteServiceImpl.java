@@ -10,6 +10,7 @@ import org.example.service.RouteService;
 import org.example.utils.DistanceCalculator;
 import org.example.utils.implementation.AStarStrategy;
 import org.example.utils.implementation.CityNavigator;
+import org.example.utils.implementation.DijkstraStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +61,7 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     public void update(Route route) {
-        this.cityNavigator.setStrategy(new AStarStrategy());
+        this.cityNavigator.setStrategy(new DijkstraStrategy());
         List<RouteCity> routeCities = cityNavigator.findRoute(route.getStartLocation().getCity(), route.getEndLocation().getCity());
         route.setTotalDistance(DistanceCalculator.calculateTotalDistance(routeCities));
         routeMapper.update(route);
@@ -81,4 +82,15 @@ public class RouteServiceImpl implements RouteService {
     public List<Route> getRoutesByCityId(Long id) {
         return routeMapper.getRoutesByCityId(id);
     }
+
+    @Override
+    public Route checkIfRouteExists(Long city1Id, Long city2Id) {
+        return routeMapper.checkIfRouteExists(city1Id, city2Id);
+    }
+
+    @Override
+    public List<Long> getCityIdsByRouteId(Long routeId) {
+        return routeMapper.getCityIdsByRouteId(routeId);
+    }
+
 }

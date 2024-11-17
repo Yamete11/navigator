@@ -20,8 +20,8 @@ public class Main {
         StartLocationServiceImpl startLocationService = new StartLocationServiceImpl();
         EndLocationServiceImpl endLocationService = new EndLocationServiceImpl();
 
-        /*createCity();
-        createRoute();*/
+        //createCity();
+        //createRoute();
         displayWelcomeMessage();
         System.out.println(new GraphDrawer().draw());
 
@@ -39,18 +39,13 @@ public class Main {
 
     }
 
-    //- create City - insert city_connection
-    //- create Route - provide start and end City
-    //- delete city
-    //- update city
-
     private static void handleCommand(String command, CityServiceImpl cityService, CityConnectionServiceImpl cityConnectionService, RouteServiceImpl routeService) {
         switch (command) {
             case "-ac", "--add-city" -> handleAddCity(cityService);
             case "-ar", "--add-route" -> handleAddRoute(routeService, cityService);
             case "-dc", "--delete-city" -> handleDeleteCity(cityService);
             case "-u", "--update-city" -> handleUpdateCity(cityService);
-            case "-dm", "--draw-map" -> new GraphDrawer().draw();
+            case "-dm", "--draw-map" -> System.out.println(new GraphDrawer().draw());
             case "-h", "--help" -> displayHelpMessage();
             case "-q", "--quit" -> {
                 isRunning = false;
@@ -77,7 +72,7 @@ public class Main {
             }
         }
 
-        double x = 0.0, y = 0.0;
+        double x, y;
         try {
             System.out.print("Enter x coordinate (1.0-95.0): ");
             x = Double.parseDouble(scanner.nextLine().trim());
@@ -150,10 +145,15 @@ public class Main {
             cityConnectionService.create(connection2);
 
             System.out.println("City successfully connected to cities with IDs " + firstCityId + " and " + secondCityId + ".");
-        } catch (NumberFormatException e) {
-            System.err.println("Invalid input. City IDs must be numbers.");
         } catch (Exception e) {
-            System.err.println("Error connecting cities: " + e.getMessage());
+            System.err.println("Error occurred: " + e.getMessage());
+            try {
+                System.out.println("Rolling back city creation...");
+                cityService.deleteById(city.getId());
+                System.out.println("City removed successfully.");
+            } catch (Exception rollbackException) {
+                System.err.println("Error during rollback: " + rollbackException.getMessage());
+            }
         }
     }
 
@@ -162,9 +162,78 @@ public class Main {
 
 
     private static void handleAddRoute(RouteServiceImpl routeService, CityServiceImpl cityService) {
-        // Implement the logic to add a route
-        System.out.println("Route added");
+        List<City> cityList = cityService.findAll();
+
+        System.out.println("List of cities:");
+        for (City city : cityList) {
+            System.out.println("ID: " + city.getId() + ", Name: " + city.getTitle());
+        }
+
+        Scanner scanner = new Scanner(System.in);
+
+        long cityId1, cityId2;
+
+        while (true) {
+            System.out.print("Enter the ID of the first city: ");
+            try {
+                cityId1 = Long.parseLong(scanner.nextLine().trim());
+                Optional<City> city1 = cityService.getById(cityId1);
+                if (city1.isPresent()) {
+                    break;
+                } else {
+                    System.err.println("City with ID " + cityId1 + " not found. Please try again.");
+                }
+            } catch (NumberFormatException e) {
+                System.err.println("Invalid input. Please enter a valid city ID.");
+            }
+        }
+
+        while (true) {
+            System.out.print("Enter the ID of the second city: ");
+            try {
+                cityId2 = Long.parseLong(scanner.nextLine().trim());
+                Optional<City> city2 = cityService.getById(cityId2);
+                if (city2.isPresent()) {
+                    if (cityId1 != cityId2) {
+                        break;
+                    } else {
+                        System.err.println("Cities cannot be the same. Please choose a different city.");
+                    }
+                } else {
+                    System.err.println("City with ID " + cityId2 + " not found. Please try again.");
+                }
+            } catch (NumberFormatException e) {
+                System.err.println("Invalid input. Please enter a valid city ID.");
+            }
+        }
+
+        System.out.println("Cities selected: " + cityService.getById(cityId1).get().getTitle() + " and " + cityService.getById(cityId2).get().getTitle());
+
+        Route existingRoute = routeService.checkIfRouteExists(cityId1, cityId2);
+        if (existingRoute != null) {
+            routeService.getCityIdsByRouteId(existingRoute.getId()).forEach(System.out::println);
+            System.out.println("A route already exists between these two cities.");
+            return;
+        }
+
+        StartLocation startLocation = new StartLocation();
+        startLocation.setCity(cityService.getById(cityId1).get());
+
+        EndLocation endLocation = new EndLocation();
+        endLocation.setCity(cityService.getById(cityId2).get());
+
+        Route route = new Route();
+        route.setStartLocation(startLocation);
+        route.setEndLocation(endLocation);
+        route.setTotalDistance(0.0);
+
+        routeService.create(route);
+
+        routeService.getCityIdsByRouteId(route.getId()).forEach(System.out::println);
+
+        System.out.println("Route added successfully!");
     }
+
 
     private static void handleDeleteCity(CityServiceImpl cityService) {
         Scanner scanner = new Scanner(System.in);
@@ -248,7 +317,7 @@ public class Main {
         }
         city.setTitle(title);
 
-        double x = 0.0, y = 0.0;
+        double x, y;
         try {
             System.out.print("Enter new x coordinate (1.0-95.0): ");
             x = Double.parseDouble(scanner.nextLine().trim());

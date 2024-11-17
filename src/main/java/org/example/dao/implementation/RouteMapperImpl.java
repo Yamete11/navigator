@@ -61,11 +61,29 @@ public class RouteMapperImpl implements RouteMapper {
     }
 
     @Override
-    public List<Route> getRoutesByCityId(Long id) {
+    public List<Route> getRoutesByCityId(Long cityId) {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             RouteMapper routeMapper = session.getMapper(RouteMapper.class);
-            return routeMapper.getRoutesByCityId(id);
+            return routeMapper.getRoutesByCityId(cityId);
         }
     }
+
+    @Override
+    public Route checkIfRouteExists(Long firstCity, Long secondCity) {
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            RouteMapper routeMapper = session.getMapper(RouteMapper.class);
+            return routeMapper.checkIfRouteExists(firstCity, secondCity);
+        }
+    }
+
+    @Override
+    public List<Long> getCityIdsByRouteId(Long routeId) {
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            RouteMapper routeMapper = session.getMapper(RouteMapper.class);
+            return routeMapper.getCityIdsByRouteId(routeId);
+        }
+    }
+
+
 
 }
