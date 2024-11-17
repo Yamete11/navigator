@@ -3,8 +3,6 @@ package org.example;
 import org.example.model.*;
 import org.example.service.implementation.*;
 import org.example.service.observer.CityLogger;
-import org.example.ui.GraphDrawer;
-import org.example.ui.NavigatorMockImpl;
 
 import java.util.List;
 import java.util.Optional;

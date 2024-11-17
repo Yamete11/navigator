@@ -2,6 +2,7 @@ package org.example.ui;
 
 import org.example.model.City;
 import org.example.model.CityConnection;
+import org.example.service.CityConnectionService;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,8 +13,8 @@ public class GraphDrawer {
     private static final int MAP_HEIGHT = 40;
     private static final int MAP_WIDTH = 40; // line has 80 characters
 
-    public GraphDrawer(INavigator navigator) {
-        this.graphSet = new GraphSet(navigator);
+    public GraphDrawer(CityConnectionService cityConnectionService) {
+        this.graphSet = new GraphSet(cityConnectionService);
     }
 
     private Set<City> getUniqueCities(Set<CityConnection> uniqueCityConnections) {

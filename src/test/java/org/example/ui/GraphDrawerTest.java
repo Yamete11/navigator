@@ -8,11 +8,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GraphDrawerTest {
 
-    private INavigator navigator;
+    private CitiConnectionServiceMockImpl citiConnectionService;
 
     @BeforeEach
     void setUp() {
-        this.navigator = new NavigatorMockImpl();
+        this.citiConnectionService = new CitiConnectionServiceMockImpl();
     }
 
     @Test
@@ -62,7 +62,7 @@ public class GraphDrawerTest {
 #                                                                                 #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 """;
-        GraphDrawer graphDrawer = new GraphDrawer(navigator);
+        GraphDrawer graphDrawer = new GraphDrawer(citiConnectionService);
         //When
         String result = graphDrawer.draw();
         //Then

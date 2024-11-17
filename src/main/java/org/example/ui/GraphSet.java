@@ -2,6 +2,7 @@ package org.example.ui;
 
 import org.example.model.City;
 import org.example.model.CityConnection;
+import org.example.service.CityConnectionService;
 
 import java.util.HashSet;
 import java.util.List;
@@ -12,8 +13,8 @@ public class GraphSet implements ICityConnectionChecker{
 
     private final Set<CityConnection> uniqueCityConnections;
 
-    public GraphSet(INavigator navigator) {
-        this.uniqueCityConnections = uniqueCityConnection(navigator.findAllCityConnections());
+    public GraphSet(CityConnectionService cityConnectionService) {
+        this.uniqueCityConnections = uniqueCityConnection(cityConnectionService.findAll());
     }
 
     public Set<CityConnection> uniqueCityConnection(List<CityConnection> connections) {

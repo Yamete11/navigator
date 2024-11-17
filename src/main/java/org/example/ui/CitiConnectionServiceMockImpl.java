@@ -2,18 +2,17 @@ package org.example.ui;
 
 import org.example.model.City;
 import org.example.model.CityConnection;
+import org.example.service.CityConnectionService;
+
+import java.util.*;
 
 import java.util.List;
 import java.util.Set;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-public class NavigatorMockImpl implements INavigator, ICityConnectionChecker {
+public class CitiConnectionServiceMockImpl implements CityConnectionService, ICityConnectionChecker {
 
     @Override
-    public List<CityConnection> findAllCityConnections() {
+    public List<CityConnection> findAll() {
 
         CityConnection cityConnection1 = new CityConnection(1L, 2.0,
                 new City(1L, "Wro", 2.0, 4.0),
@@ -57,15 +56,33 @@ public class NavigatorMockImpl implements INavigator, ICityConnectionChecker {
         return uniqueConnections;
     }
 
-    public static void main(String[] args) {
-        NavigatorMockImpl navigator = new NavigatorMockImpl();
+    @Override
+    public void create(CityConnection entity) {
 
-        List<CityConnection> connections = navigator.findAllCityConnections();
+    }
 
-        boolean isDuplicate = navigator.isCityConnectionIdDuplicate(connections.get(4), connections.get(3));
+    @Override
+    public Optional<CityConnection> getById(Long id) {
+        return Optional.empty();
+    }
 
-        System.out.println("Czy połączenie jest duplikatem? " + isDuplicate);
-        System.out.println(connections.get(4));
-        System.out.println(connections.get(3));
+    @Override
+    public void update(CityConnection entity) {
+
+    }
+
+    @Override
+    public void deleteById(Long id) {
+
+    }
+
+    @Override
+    public List<CityConnection> getCityConnectionsByCityId(Long id) {
+        return List.of();
+    }
+
+    @Override
+    public void deleteByCityId(Long id) {
+
     }
 }
