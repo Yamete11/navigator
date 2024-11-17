@@ -4,6 +4,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.example.config.ConnectionManager;
 import org.example.dao.RouteMapper;
+import org.example.model.CityConnection;
 import org.example.model.Route;
 
 import java.util.List;
@@ -77,10 +78,10 @@ public class RouteMapperImpl implements RouteMapper {
     }
 
     @Override
-    public List<Long> getCityIdsByRouteId(Long routeId) {
+    public List<CityConnection> getCityConnectionsByRouteId(Long routeId) {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             RouteMapper routeMapper = session.getMapper(RouteMapper.class);
-            return routeMapper.getCityIdsByRouteId(routeId);
+            return routeMapper.getCityConnectionsByRouteId(routeId);
         }
     }
 

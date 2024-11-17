@@ -1,6 +1,7 @@
 package org.example.dao;
 
 import org.apache.ibatis.annotations.*;
+import org.example.model.CityConnection;
 import org.example.model.Route;
 import org.example.model.StartLocation;
 import org.example.model.EndLocation;
@@ -115,11 +116,27 @@ public interface RouteMapper extends GenericDao<Route> {
             "OR (sl.city_id = #{city2Id} AND el.city_id = #{city1Id})")
     Route checkIfRouteExists(@Param("city1Id") Long city1Id, @Param("city2Id") Long city2Id);
 
-    @Select("SELECT c.city_id " +
-            "FROM route_cities rc " +
-            "JOIN cities c ON rc.city_id = c.city_id " +
-            "WHERE rc.route_id = #{routeId}")
-    List<Long> getCityIdsByRouteId(@Param("routeId") Long routeId);
+    @Select("SELECT cc.city_connection_id AS city_connection_id, cc.first_city_id AS first_city_id, " +
+            "cc.second_city_id AS second_city_id, cc.distance AS distance " +
+            "FROM city_connections cc " +
+            "JOIN (" +
+            "    SELECT rc1.city_id AS first_city_id, rc2.city_id AS second_city_id " +
+            "    FROM route_cities rc1 " +
+            "    JOIN route_cities rc2 ON rc1.route_id = rc2.route_id " +
+            "    AND rc1.order_index + 1 = rc2.order_index " +
+            "    WHERE rc1.route_id = #{routeId} " +
+            ") connections " +
+            "ON cc.first_city_id = connections.first_city_id " +
+            "AND cc.second_city_id = connections.second_city_id")
+    @Results({
+            @Result(column = "city_connection_id", property = "id"),
+            @Result(column = "first_city_id", property = "firstCity.id"),
+            @Result(column = "second_city_id", property = "secondCity.id"),
+            @Result(column = "distance", property = "distance")
+    })
+    List<CityConnection> getCityConnectionsByRouteId(@Param("routeId") Long routeId);
+
+
 
 
 }
