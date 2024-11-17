@@ -211,7 +211,7 @@ public class Main {
 
         Route existingRoute = routeService.checkIfRouteExists(cityId1, cityId2);
         if (existingRoute != null) {
-            routeService.getCityIdsByRouteId(existingRoute.getId()).forEach(System.out::println);
+            routeService.getCityConnectionsByRouteId(existingRoute.getId()).forEach(System.out::println);
             System.out.println("A route already exists between these two cities.");
             return;
         }
@@ -229,7 +229,7 @@ public class Main {
 
         routeService.create(route);
 
-        routeService.getCityIdsByRouteId(route.getId()).forEach(System.out::println);
+        routeService.getCityConnectionsByRouteId(route.getId()).forEach(System.out::println);
 
         System.out.println("Route added successfully!");
     }

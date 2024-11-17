@@ -89,8 +89,8 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public List<Long> getCityIdsByRouteId(Long routeId) {
-        return routeMapper.getCityIdsByRouteId(routeId);
+    public List<CityConnection> getCityConnectionsByRouteId(Long routeId) {
+        return routeMapper.getCityConnectionsByRouteId(routeId);
     }
 
 }
