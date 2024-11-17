@@ -116,9 +116,13 @@ public interface RouteMapper extends GenericDao<Route> {
             "OR (sl.city_id = #{city2Id} AND el.city_id = #{city1Id})")
     Route checkIfRouteExists(@Param("city1Id") Long city1Id, @Param("city2Id") Long city2Id);
 
-    @Select("SELECT cc.city_connection_id AS city_connection_id, cc.first_city_id AS first_city_id, " +
-            "cc.second_city_id AS second_city_id, cc.distance AS distance " +
+    @Select("SELECT cc.city_connection_id AS city_connection_id, " +
+            "cc.first_city_id AS first_city_id, c1.title AS first_city_title, c1.x AS first_city_x, c1.y AS first_city_y, " +
+            "cc.second_city_id AS second_city_id, c2.title AS second_city_title, c2.x AS second_city_x, c2.y AS second_city_y, " +
+            "cc.distance AS distance " +
             "FROM city_connections cc " +
+            "JOIN cities c1 ON cc.first_city_id = c1.city_id " +
+            "JOIN cities c2 ON cc.second_city_id = c2.city_id " +
             "JOIN (" +
             "    SELECT rc1.city_id AS first_city_id, rc2.city_id AS second_city_id " +
             "    FROM route_cities rc1 " +
@@ -131,10 +135,18 @@ public interface RouteMapper extends GenericDao<Route> {
     @Results({
             @Result(column = "city_connection_id", property = "id"),
             @Result(column = "first_city_id", property = "firstCity.id"),
+            @Result(column = "first_city_title", property = "firstCity.title"),
+            @Result(column = "first_city_x", property = "firstCity.x"),
+            @Result(column = "first_city_y", property = "firstCity.y"),
             @Result(column = "second_city_id", property = "secondCity.id"),
+            @Result(column = "second_city_title", property = "secondCity.title"),
+            @Result(column = "second_city_x", property = "secondCity.x"),
+            @Result(column = "second_city_y", property = "secondCity.y"),
             @Result(column = "distance", property = "distance")
     })
     List<CityConnection> getCityConnectionsByRouteId(@Param("routeId") Long routeId);
+
+
 
 
 
