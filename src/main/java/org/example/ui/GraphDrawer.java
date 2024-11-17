@@ -3,7 +3,9 @@ package org.example.ui;
 import org.example.model.City;
 import org.example.model.CityConnection;
 import org.example.service.CityConnectionService;
+import org.example.service.CityService;
 import org.example.service.implementation.CityConnectionServiceImpl;
+import org.example.service.implementation.CityServiceImpl;
 
 import java.util.HashSet;
 import java.util.List;
@@ -12,15 +14,23 @@ import java.util.Set;
 public class GraphDrawer {
 
     private final CityConnectionService cityConnectionService;
+    private final CityService cityService;
     private static final int MAP_HEIGHT = 50;
     private static final int MAP_WIDTH = 50;
 
     public GraphDrawer() {
         cityConnectionService = new CityConnectionServiceImpl();
+        cityService = new CityServiceImpl();
     }
 
     public String draw() {
         List<CityConnection> connections = cityConnectionService.findAll();
+        String[][] map = initializeMap();
+        drawCitiesAndConnections(map, connections);
+        return buildMapString(map);
+    }
+
+    public String drawRoute(List<CityConnection> connections) {
         String[][] map = initializeMap();
         drawCitiesAndConnections(map, connections);
         return buildMapString(map);
@@ -43,7 +53,7 @@ public class GraphDrawer {
             cities.add(connection.getSecondCity());
         }
 
-        for (City city : cities) {
+        for (City city : cityService.findAll()) {
             int x = (int) ((city.getX() / 10) / 10 * (MAP_WIDTH - 1));
             int y = (int) ((city.getY()/ 10) / 10 * (MAP_HEIGHT - 1));
 
