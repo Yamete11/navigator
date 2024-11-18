@@ -19,7 +19,7 @@ public interface RouteFindingStrategy {
         AtomicLong order = new AtomicLong(0);
 
         while (current != null) {
-            City currentCity = cityService.findAll().get(Math.toIntExact(current.getId()) - 1);
+            City currentCity = cityService.getById(current.getId()).orElseThrow(() -> new IllegalStateException("City not found"));
             path.add(new RouteCity(currentCity, null, 0L));
             current = previousNodes.get(current);
         }
