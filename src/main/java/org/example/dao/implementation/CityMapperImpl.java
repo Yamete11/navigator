@@ -103,4 +103,12 @@ public class CityMapperImpl implements CityMapper {
         }
     }
 
+    @Override
+    public List<City> getCitiesNotInConnections() {
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            CityMapper cityMapper = session.getMapper(CityMapper.class);
+            return cityMapper.getCitiesNotInConnections();
+        }
+    }
+
 }

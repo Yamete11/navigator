@@ -60,4 +60,20 @@ public interface CityMapper extends GenericDao<City>{
             @Result(property = "y", column = "y")
     })
     Optional<City> getByCoordinates(@Param("x") double x, @Param("y") double y);
+
+    @Select("SELECT c.city_id AS id, c.title, c.x, c.y " +
+            "FROM cities c " +
+            "WHERE c.city_id NOT IN (" +
+            "    SELECT DISTINCT cc.first_city_id FROM city_connections cc " +
+            "    UNION " +
+            "    SELECT DISTINCT cc.second_city_id FROM city_connections cc" +
+            ")")
+    @Results({
+            @Result(column = "id", property = "id"),
+            @Result(column = "title", property = "title"),
+            @Result(column = "x", property = "x"),
+            @Result(column = "y", property = "y")
+    })
+    List<City> getCitiesNotInConnections();
+
 }
