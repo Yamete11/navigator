@@ -2,11 +2,13 @@ package org.example.service.implementation;
 
 import org.example.dao.RouteMapper;
 import org.example.dao.implementation.RouteMapperImpl;
-import org.example.model.City;
 import org.example.model.CityConnection;
 import org.example.model.Route;
 import org.example.model.RouteCity;
 import org.example.service.RouteService;
+import org.example.service.observer.RouteEventType;
+import org.example.service.observer.RouteObservable;
+import org.example.service.observer.RouteObserver;
 import org.example.utils.DistanceCalculator;
 import org.example.utils.implementation.AStarStrategy;
 import org.example.utils.implementation.CityNavigator;
@@ -15,9 +17,8 @@ import org.example.utils.implementation.DijkstraStrategy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-public class RouteServiceImpl implements RouteService {
+public class RouteServiceImpl implements RouteService, RouteObservable {
 
     private final RouteMapper routeMapper;
     private final StartLocationServiceImpl startLocationService;
@@ -26,6 +27,8 @@ public class RouteServiceImpl implements RouteService {
     private final CityServiceImpl cityService;
     private final CityConnectionServiceImpl cityConnection;
     private final CityNavigator cityNavigator;
+
+    private final List<RouteObserver> observers = new ArrayList<>();
 
     public RouteServiceImpl() {
         this.routeMapper = new RouteMapperImpl();
@@ -47,6 +50,8 @@ public class RouteServiceImpl implements RouteService {
         routeMapper.create(route);
         routeCities.forEach(routeCity -> routeCity.setRoute(route));
         routeCityService.createBatch(routeCities);
+
+        notifyObservers(RouteEventType.ROUTE_ADDED, route);
     }
 
     @Override
@@ -67,6 +72,8 @@ public class RouteServiceImpl implements RouteService {
         routeMapper.update(route);
         routeCities.forEach(routeCity -> routeCity.setRoute(route));
         routeCityService.createBatch(routeCities);
+
+        notifyObservers(RouteEventType.ROUTE_UPDATED, route);
     }
 
     @Override
@@ -76,6 +83,8 @@ public class RouteServiceImpl implements RouteService {
         routeMapper.deleteById(id);
         startLocationService.deleteById(route.getStartLocation().getId());
         endLocationService.deleteById(route.getEndLocation().getId());
+
+        notifyObservers(RouteEventType.ROUTE_DELETED, route);
     }
 
     @Override
@@ -93,4 +102,20 @@ public class RouteServiceImpl implements RouteService {
         return routeMapper.getCityConnectionsByRouteId(routeId);
     }
 
+    @Override
+    public void addObserver(RouteObserver observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(RouteObserver observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers(RouteEventType eventType, Route route) {
+        for (RouteObserver observer : observers) {
+            observer.update(eventType, route);
+        }
+    }
 }

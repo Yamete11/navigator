@@ -97,18 +97,27 @@ public class CityServiceImpl implements CityService, Observable {
         cityOpt.ifPresent(city -> {
             cityConnectionService.deleteByCityId(id);
             List<Route> routes = getRouteService().getRoutesByCityId(id);
-            System.out.println("DELETE" + routes);
             for (Route route : routes) {
                 getRouteService().deleteById(route.getId());
             }
             cityMapper.deleteById(id);
             notifyObservers(CityEventType.CITY_DELETED, city);
+            List<City> citiesNotInConnections = getCitiesNotInConnections();
+            for (City cityWithoutConnection : citiesNotInConnections) {
+                cityMapper.deleteById(cityWithoutConnection.getId());
+                notifyObservers(CityEventType.CITY_DELETED, cityWithoutConnection);
+            }
         });
     }
 
     @Override
     public Optional<City> getCityByTitle(String title) {
         return cityMapper.getByTitle(title);
+    }
+
+    @Override
+    public List<City> getCitiesNotInConnections() {
+        return cityMapper.getCitiesNotInConnections();
     }
 
     @Override

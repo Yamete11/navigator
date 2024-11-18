@@ -150,11 +150,4 @@ public interface RouteMapper extends GenericDao<Route> {
             @Result(column = "distance", property = "distance")
     })
     List<CityConnection> getCityConnectionsByRouteId(@Param("routeId") Long routeId);
-
-
-
-
-
-
-
 }
