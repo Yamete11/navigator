@@ -97,6 +97,7 @@ public class CityServiceImpl implements CityService, Observable {
         cityOpt.ifPresent(city -> {
             cityConnectionService.deleteByCityId(id);
             List<Route> routes = getRouteService().getRoutesByCityId(id);
+            System.out.println("DELETE" + routes);
             for (Route route : routes) {
                 getRouteService().deleteById(route.getId());
             }

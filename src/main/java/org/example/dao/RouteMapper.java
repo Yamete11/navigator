@@ -87,7 +87,11 @@ public interface RouteMapper extends GenericDao<Route> {
             "JOIN cities c1 ON sl.city_id = c1.city_id " +
             "JOIN end_locations el ON r.end_location_id = el.end_location_id " +
             "JOIN cities c2 ON el.city_id = c2.city_id " +
-            "WHERE sl.city_id = #{cityId} OR el.city_id = #{cityId}")
+            "WHERE r.route_id IN (" +
+            "    SELECT DISTINCT rc.route_id " +
+            "    FROM route_cities rc " +
+            "    WHERE rc.city_id = #{cityId}" +
+            ")")
     @Results({
             @Result(column = "id", property = "id"),
             @Result(column = "total_distance", property = "totalDistance"),
@@ -103,6 +107,7 @@ public interface RouteMapper extends GenericDao<Route> {
             @Result(property = "endLocation.city.y", column = "end_y")
     })
     List<Route> getRoutesByCityId(@Param("cityId") Long cityId);
+
 
     @Select("SELECT r.route_id AS id, r.total_distance, " +
             "sl.start_location_id AS start_location_id, sl.city_id AS start_city_id, c1.title AS start_city_title, c1.x AS start_x, c1.y AS start_y, " +
@@ -127,11 +132,11 @@ public interface RouteMapper extends GenericDao<Route> {
             "    SELECT rc1.city_id AS first_city_id, rc2.city_id AS second_city_id " +
             "    FROM route_cities rc1 " +
             "    JOIN route_cities rc2 ON rc1.route_id = rc2.route_id " +
-            "    AND rc1.order_index + 1 = rc2.order_index " +
+            "    AND rc1.order_index = rc2.order_index - 1 " +
             "    WHERE rc1.route_id = #{routeId} " +
             ") connections " +
-            "ON cc.first_city_id = connections.first_city_id " +
-            "AND cc.second_city_id = connections.second_city_id")
+            "ON (cc.first_city_id = connections.first_city_id AND cc.second_city_id = connections.second_city_id) " +
+            "OR (cc.first_city_id = connections.second_city_id AND cc.second_city_id = connections.first_city_id)")
     @Results({
             @Result(column = "city_connection_id", property = "id"),
             @Result(column = "first_city_id", property = "firstCity.id"),
@@ -145,6 +150,7 @@ public interface RouteMapper extends GenericDao<Route> {
             @Result(column = "distance", property = "distance")
     })
     List<CityConnection> getCityConnectionsByRouteId(@Param("routeId") Long routeId);
+
 
 
 
