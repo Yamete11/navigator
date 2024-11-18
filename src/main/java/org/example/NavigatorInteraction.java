@@ -45,7 +45,7 @@ public class NavigatorInteraction {
             case "-ar", "--add-route" -> handleAddRoute();
             case "-dc", "--delete-city" -> handleDeleteCity();
             case "-u", "--update-city" -> handleUpdateCity();
-            case "-dm", "--draw-map" -> System.out.println(new GraphDrawer().draw());
+            case "-dm", "--draw-map" -> handleDrawMap();
             case "-h", "--help" -> displayHelpMessage();
             case "-q", "--quit" -> {
                 isRunning = false;
@@ -53,6 +53,9 @@ public class NavigatorInteraction {
             }
             default -> System.out.println("Unknown command: " + command);
         }
+    }
+    private void handleDrawMap(){
+        System.out.println(new GraphDrawer().draw());
     }
 
     private void handleAddCity() {
