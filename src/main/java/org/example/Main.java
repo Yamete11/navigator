@@ -20,7 +20,7 @@ public class Main {
         StartLocationServiceImpl startLocationService = new StartLocationServiceImpl();
         EndLocationServiceImpl endLocationService = new EndLocationServiceImpl();
 
-        //createCity();
+        createCity();
         //createRoute();
         displayWelcomeMessage();
         System.out.println(new GraphDrawer().draw());
@@ -229,7 +229,7 @@ public class Main {
         route.setTotalDistance(0.0);
 
         routeService.create(route);
-
+        routeService.getCityConnectionsByRouteId(route.getId()).forEach(System.out::println);
         System.out.println(graphDrawer.drawRoute(routeService.getCityConnectionsByRouteId(route.getId())));
 
         System.out.println("Route added successfully!");
