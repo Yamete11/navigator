@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.model.*;
+import org.example.service.CityConnectionService;
 import org.example.service.implementation.*;
 import org.example.service.observer.CityLogger;
 import org.example.ui.GraphDrawer;
@@ -48,7 +49,7 @@ public class Main {
             case "-ar", "--add-route" -> handleAddRoute(routeService, cityService);
             case "-dc", "--delete-city" -> handleDeleteCity(cityService);
             case "-u", "--update-city" -> handleUpdateCity(cityService);
-            case "-dm", "--draw-map" -> System.out.println(new GraphDrawer(cityConnectionService).draw());
+            case "-dm", "--draw-map" -> handleDrawMap(cityConnectionService);
             case "-h", "--help" -> displayHelpMessage();
             case "-q", "--quit" -> {
                 isRunning = false;
@@ -274,6 +275,10 @@ public class Main {
         } catch (Exception e) {
             System.err.println("Error updating city: " + e.getMessage());
         }
+    }
+
+    private static void handleDrawMap(CityConnectionService cityConnectionService) {
+        System.out.println(new GraphDrawer(cityConnectionService).draw());
     }
 
 
