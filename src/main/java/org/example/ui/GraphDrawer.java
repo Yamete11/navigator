@@ -5,7 +5,6 @@ import org.example.model.CityConnection;
 import org.example.service.CityConnectionService;
 
 import java.util.Set;
-import java.util.TreeSet;
 
 public class GraphDrawer {
 
@@ -15,21 +14,6 @@ public class GraphDrawer {
 
     public GraphDrawer(CityConnectionService cityConnectionService) {
         this.graphSet = new GraphSet(cityConnectionService);
-    }
-
-    private Set<City> getUniqueCities(Set<CityConnection> uniqueCityConnections) {
-        Set<City> uniqueCities = new TreeSet<>((c1, c2) -> {
-            if (c1.getId().equals(c2.getId())) {
-                return 0;
-            }
-            return c1.getId().compareTo(c2.getId());
-        });
-        for (CityConnection connection : uniqueCityConnections) {
-            uniqueCities.add(connection.getFirstCity());
-            uniqueCities.add(connection.getSecondCity());
-        }
-
-        return uniqueCities;
     }
 
     public String draw() {
@@ -50,7 +34,7 @@ public class GraphDrawer {
 
     private void drawCitiesAndConnections(String[][] map, GraphSet graphSet) {
         Set<CityConnection> connections = graphSet.getUniqueCityConnections();
-        Set<City> cities = getUniqueCities(connections);
+        Set<City> cities = graphSet.getUniqueCity();
 
         for (City city : cities) {
             int x = (int) ((city.getX() / 10) / 10 * (MAP_WIDTH - 1));
