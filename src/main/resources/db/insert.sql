@@ -1,11 +1,11 @@
 INSERT INTO `Cities` (`city_id`, `title`, `x`, `y`) VALUES
-                                                        (1, 'CityA', 10, 5),
-                                                        (2, 'CityB', 95, 2),
-                                                        (3, 'CityC', 20, 15),
-                                                        (4, 'CityD', 75, 10),
-                                                        (5, 'CityE', 50, 25),
-                                                        (6, 'CityF', 90, 18),
-                                                        (7, 'CityG', 5, 28);
+                                                        (1, 'ACity', 10, 5),
+                                                        (2, 'BCity', 95, 2),
+                                                        (3, 'CCity', 20, 15),
+                                                        (4, 'DCity', 75, 10),
+                                                        (5, 'ECity', 50, 25),
+                                                        (6, 'FCity', 90, 18),
+                                                        (7, 'GCity', 5, 28);
 
 
 
