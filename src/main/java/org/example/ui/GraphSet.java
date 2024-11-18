@@ -1,6 +1,5 @@
 package org.example.ui;
 
-import org.example.model.City;
 import org.example.model.CityConnection;
 import org.example.service.CityConnectionService;
 
@@ -9,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class GraphSet implements ICityConnectionChecker{
+public class GraphSet {
 
     private final Set<CityConnection> uniqueCityConnections;
 
@@ -19,7 +18,12 @@ public class GraphSet implements ICityConnectionChecker{
 
     public Set<CityConnection> uniqueCityConnection(List<CityConnection> connections) {
         Set<CityConnection> uniqueCityConnections =
-                new TreeSet<>((c1, c2) -> isCityConnectionIdDuplicate(c1,c2)?0:1);
+                new TreeSet<>((c1, c2) -> {
+                    if (c1.getId().equals(c2.getId())) {
+                        return 0;
+                    }
+                    return c1.getId().compareTo(c2.getId());
+                });
         uniqueCityConnections.addAll(connections);
         return uniqueCityConnections;
     }

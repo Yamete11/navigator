@@ -4,22 +4,26 @@ import org.example.model.City;
 import org.example.model.CityConnection;
 import org.example.service.CityConnectionService;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class GraphDrawer {
 
     GraphSet graphSet;
-    private static final int MAP_HEIGHT = 40;
-    private static final int MAP_WIDTH = 40; // line has 80 characters
+    private static final int MAP_HEIGHT = 80;
+    private static final int MAP_WIDTH = 80;
 
     public GraphDrawer(CityConnectionService cityConnectionService) {
         this.graphSet = new GraphSet(cityConnectionService);
     }
 
     private Set<City> getUniqueCities(Set<CityConnection> uniqueCityConnections) {
-        Set<City> uniqueCities = new HashSet<>();
-
+        Set<City> uniqueCities = new TreeSet<>((c1, c2) -> {
+            if (c1.getId().equals(c2.getId())) {
+                return 0;
+            }
+            return c1.getId().compareTo(c2.getId());
+        });
         for (CityConnection connection : uniqueCityConnections) {
             uniqueCities.add(connection.getFirstCity());
             uniqueCities.add(connection.getSecondCity());
@@ -49,8 +53,8 @@ public class GraphDrawer {
         Set<City> cities = getUniqueCities(connections);
 
         for (City city : cities) {
-            int x = (int) ((city.getX() / 1) / 10 * (MAP_WIDTH - 1));
-            int y = (int) ((city.getY()/ 1) / 10 * (MAP_HEIGHT - 1));
+            int x = (int) ((city.getX() / 10) / 10 * (MAP_WIDTH - 1));
+            int y = (int) ((city.getY()/ 10) / 10 * (MAP_HEIGHT - 1));
 
             x = Math.max(0, Math.min(MAP_WIDTH - 1, x));
             y = Math.max(0, Math.min(MAP_HEIGHT - 1, y));
@@ -62,10 +66,10 @@ public class GraphDrawer {
             City cityStart = connection.getFirstCity();
             City cityEnd = connection.getSecondCity();
 
-            int x1 = (int) ((cityStart.getX() / 1) / 10 * (MAP_WIDTH - 1));
-            int y1 = (int) ((cityStart.getY() / 1) / 10 * (MAP_HEIGHT - 1));
-            int x2 = (int) ((cityEnd.getX() / 1) / 10 * (MAP_WIDTH - 1));
-            int y2 = (int) ((cityEnd.getY() / 1) / 10 * (MAP_HEIGHT - 1));
+            int x1 = (int) ((cityStart.getX() / 10) / 10 * (MAP_WIDTH - 1));
+            int y1 = (int) ((cityStart.getY() / 10) / 10 * (MAP_HEIGHT - 1));
+            int x2 = (int) ((cityEnd.getX() / 10) / 10 * (MAP_WIDTH - 1));
+            int y2 = (int) ((cityEnd.getY() / 10) / 10 * (MAP_HEIGHT - 1));
 
             x1 = Math.max(0, Math.min(MAP_WIDTH - 1, x1));
             y1 = Math.max(0, Math.min(MAP_HEIGHT - 1, y1));
