@@ -4,6 +4,7 @@ import org.example.model.City;
 import org.example.model.CityConnection;
 import org.example.service.CityConnectionService;
 
+import java.util.List;
 import java.util.Set;
 
 public class GraphDrawer {
@@ -19,6 +20,12 @@ public class GraphDrawer {
     public String draw() {
         String[][] map = initializeMap();
         drawCitiesAndConnections(map, graphSet);
+        return buildMapString(map);
+    }
+
+    public String drawRoute(List<CityConnection> connections) {
+        String[][] map = initializeMap();
+        //drawCitiesAndConnections(map, connections);
         return buildMapString(map);
     }
 

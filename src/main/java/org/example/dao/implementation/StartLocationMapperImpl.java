@@ -3,7 +3,6 @@ package org.example.dao.implementation;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.example.config.ConnectionManager;
-import org.example.dao.CityConnectionMapper;
 import org.example.dao.StartLocationMapper;
 import org.example.model.StartLocation;
 

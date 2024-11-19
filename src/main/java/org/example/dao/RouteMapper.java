@@ -3,8 +3,6 @@ package org.example.dao;
 import org.apache.ibatis.annotations.*;
 import org.example.model.CityConnection;
 import org.example.model.Route;
-import org.example.model.StartLocation;
-import org.example.model.EndLocation;
 
 import java.util.List;
 import java.util.Optional;

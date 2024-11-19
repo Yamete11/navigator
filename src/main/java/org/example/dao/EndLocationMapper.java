@@ -2,7 +2,6 @@ package org.example.dao;
 
 import org.apache.ibatis.annotations.*;
 import org.example.model.EndLocation;
-import org.example.model.City;
 
 import java.util.List;
 import java.util.Optional;

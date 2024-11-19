@@ -7,10 +7,6 @@ import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.apache.ibatis.session.Configuration;
 import org.example.dao.*;
-import org.example.model.EndLocation;
-import org.example.model.Route;
-import org.example.model.RouteCity;
-import org.example.model.StartLocation;
 
 import java.util.logging.Logger;
 

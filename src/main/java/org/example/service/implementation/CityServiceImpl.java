@@ -5,7 +5,6 @@ import org.example.dao.implementation.CityMapperImpl;
 import org.example.model.City;
 import org.example.model.CityConnection;
 import org.example.model.Route;
-import org.example.model.RouteCity;
 import org.example.service.CityService;
 import org.example.service.observer.CityEventType;
 import org.example.service.observer.Observable;
