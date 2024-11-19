@@ -1,9 +1,13 @@
 package org.example.utils.implementation;
 
+import org.example.dao.implementation.CityConnectionMapperImpl;
+import org.example.dao.implementation.CityMapperImpl;
 import org.example.model.City;
 import org.example.model.RouteCity;
 import org.example.service.CityService;
+import org.example.service.implementation.CityConnectionServiceImpl;
 import org.example.service.implementation.CityServiceImpl;
+import org.example.service.implementation.RouteCityServiceImpl;
 import org.example.utils.*;
 
 import java.util.*;
@@ -17,7 +21,7 @@ public class AStarStrategy implements RouteFindingStrategy {
     public AStarStrategy() {
         graph = GraphLoader.getGraph();
         navigator = new CityNavigator();
-        cityService = new CityServiceImpl();
+        cityService = new CityServiceImpl(new CityMapperImpl(), new CityConnectionServiceImpl(new CityConnectionMapperImpl()),new RouteCityServiceImpl());
         this.heuristicCache = HeuristicCache.getInstance();
     }
 

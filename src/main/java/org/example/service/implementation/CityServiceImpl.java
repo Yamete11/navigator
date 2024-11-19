@@ -1,20 +1,20 @@
 package org.example.service.implementation;
 
 import org.example.dao.CityMapper;
-import org.example.dao.implementation.CityMapperImpl;
+import org.example.dao.implementation.RouteMapperImpl;
 import org.example.model.City;
 import org.example.model.CityConnection;
 import org.example.model.Route;
 import org.example.service.CityService;
 import org.example.service.observer.CityEventType;
-import org.example.service.observer.Observable;
 import org.example.service.observer.Observer;
+import org.example.utils.implementation.CityNavigator;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CityServiceImpl implements CityService, Observable {
+public class CityServiceImpl implements CityService {
 
     private final CityMapper cityMapper;
     private final CityConnectionServiceImpl cityConnectionService;
@@ -22,15 +22,20 @@ public class CityServiceImpl implements CityService, Observable {
     private RouteServiceImpl routeService;
     private final List<Observer> observers = new ArrayList<>();
 
-    public CityServiceImpl() {
-        this.cityMapper = new CityMapperImpl();
-        this.cityConnectionService = new CityConnectionServiceImpl();
-        this.routeCityService = new RouteCityServiceImpl();
+    public CityServiceImpl(CityMapper cityMapper, CityConnectionServiceImpl cityConnectionService, RouteCityServiceImpl routeCityService) {
+        this.cityMapper = cityMapper;
+        this.cityConnectionService = cityConnectionService;
+        this.routeCityService = routeCityService;
     }
 
     private RouteServiceImpl getRouteService() {
         if (routeService == null) {
-            routeService = new RouteServiceImpl();
+            routeService = new RouteServiceImpl(
+                    new RouteMapperImpl(),
+                    new StartLocationServiceImpl(),
+                    new EndLocationServiceImpl(),
+                    new RouteCityServiceImpl(),
+                    new CityNavigator());
         }
         return routeService;
     }

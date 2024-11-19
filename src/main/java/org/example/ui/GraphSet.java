@@ -9,13 +9,18 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class GraphSet {
+class GraphSet {
 
     private final Set<CityConnection> uniqueCityConnections;
     private final Set<City> uniqueCities;
 
     public GraphSet(CityConnectionService cityConnectionService) {
         this.uniqueCityConnections = uniqueCityConnection(cityConnectionService.findAll());
+        this.uniqueCities = uniqueCities(uniqueCityConnections);
+    }
+
+    public GraphSet(List<CityConnection> connections) {
+        this.uniqueCityConnections = uniqueCityConnection(connections);
         this.uniqueCities = uniqueCities(uniqueCityConnections);
     }
 

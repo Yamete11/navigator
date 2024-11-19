@@ -25,7 +25,7 @@ public class GraphDrawer {
 
     public String drawRoute(List<CityConnection> connections) {
         String[][] map = initializeMap();
-        //drawCitiesAndConnections(map, connections);
+        drawCitiesAndConnections(map, new GraphSet(connections));
         return buildMapString(map);
     }
 

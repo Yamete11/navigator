@@ -1,13 +1,14 @@
 package org.example.service.implementation;
 
 import org.example.dao.RouteMapper;
-import org.example.dao.implementation.RouteMapperImpl;
 import org.example.model.CityConnection;
 import org.example.model.Route;
 import org.example.model.RouteCity;
+import org.example.service.EndLocationService;
+import org.example.service.RouteCityService;
 import org.example.service.RouteService;
+import org.example.service.StartLocationService;
 import org.example.service.observer.RouteEventType;
-import org.example.service.observer.RouteObservable;
 import org.example.service.observer.RouteObserver;
 import org.example.utils.DistanceCalculator;
 import org.example.utils.implementation.AStarStrategy;
@@ -18,27 +19,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class RouteServiceImpl implements RouteService, RouteObservable {
+public class RouteServiceImpl implements RouteService {
 
     private final RouteMapper routeMapper;
-    private final StartLocationServiceImpl startLocationService;
-    private final EndLocationServiceImpl endLocationService;
-    private final RouteCityServiceImpl routeCityService;
-    private final CityServiceImpl cityService;
-    private final CityConnectionServiceImpl cityConnection;
+    private final StartLocationService startLocationService;
+    private final EndLocationService endLocationService;
+    private final RouteCityService routeCityService;
     private final CityNavigator cityNavigator;
 
     private final List<RouteObserver> observers = new ArrayList<>();
 
-    public RouteServiceImpl() {
-        this.routeMapper = new RouteMapperImpl();
-        this.startLocationService = new StartLocationServiceImpl();
-        this.endLocationService = new EndLocationServiceImpl();
-        this.routeCityService = new RouteCityServiceImpl();
-        this.cityService = new CityServiceImpl();
-        this.cityConnection = new CityConnectionServiceImpl();
-        this.cityNavigator = new CityNavigator();
+    public RouteServiceImpl(RouteMapper routeMapper, StartLocationService startLocationService, EndLocationService endLocationService, RouteCityService routeCityService, CityNavigator cityNavigator) {
+        this.routeMapper = routeMapper;
+        this.startLocationService = startLocationService;
+        this.endLocationService = endLocationService;
+        this.routeCityService = routeCityService;
+        this.cityNavigator = cityNavigator;
     }
+
 
     @Override
     public void create(Route route) {

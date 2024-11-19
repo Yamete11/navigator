@@ -1,12 +1,15 @@
 package org.example.utils;
 
 import lombok.Getter;
+import org.example.dao.implementation.CityConnectionMapperImpl;
+import org.example.dao.implementation.CityMapperImpl;
 import org.example.model.City;
 import org.example.model.CityConnection;
 import org.example.service.CityConnectionService;
 import org.example.service.CityService;
 import org.example.service.implementation.CityConnectionServiceImpl;
 import org.example.service.implementation.CityServiceImpl;
+import org.example.service.implementation.RouteCityServiceImpl;
 
 import java.util.List;
 import java.util.Objects;
@@ -16,8 +19,8 @@ public class GraphLoader {
     private static final Graph graph = new Graph();
 
     static {
-        CityService cityService = new CityServiceImpl();
-        CityConnectionService cityConnectionService = new CityConnectionServiceImpl();
+        CityService cityService = new CityServiceImpl(new CityMapperImpl(), new CityConnectionServiceImpl(new CityConnectionMapperImpl()),new RouteCityServiceImpl());
+        CityConnectionService cityConnectionService = new CityConnectionServiceImpl(new CityConnectionMapperImpl());
         loadGraph(cityService, cityConnectionService);
     }
 
@@ -32,6 +35,10 @@ public class GraphLoader {
 
             }
         }
+    }
+
+    public static Graph getGraph() {
+        return graph;
     }
 }
 

@@ -5,7 +5,9 @@ import org.example.model.CityConnection;
 import org.example.model.Route;
 import org.example.model.StartLocation;
 import org.example.model.EndLocation;
-import org.example.service.implementation.*;
+import org.example.service.CityConnectionService;
+import org.example.service.CityService;
+import org.example.service.RouteService;
 import org.example.ui.GraphDrawer;
 
 import java.util.List;
@@ -13,23 +15,27 @@ import java.util.Optional;
 import java.util.Scanner;
 
 public class NavigatorInteraction {
-    private final CityServiceImpl cityService;
-    private final RouteServiceImpl routeService;
+    private final CityService cityService;
+    private final RouteService routeService;
     private final Scanner scanner;
+    private final GraphDrawer graphDrawer;
+    private final CityConnectionService cityConnectionService;
 
     private boolean isRunning = true;
 
     public NavigatorInteraction(
-            CityServiceImpl cityService,
-            RouteServiceImpl routeService) {
+            CityService cityService,
+            RouteService routeService, GraphDrawer graphDrawer, CityConnectionService cityConnectionService) {
         this.cityService = cityService;
         this.routeService = routeService;
+        this.graphDrawer = graphDrawer;
+        this.cityConnectionService = cityConnectionService;
         this.scanner = new Scanner(System.in);
     }
 
     public void start() {
         displayWelcomeMessage();
-        //System.out.println(new GraphDrawer().draw());
+        System.out.println(graphDrawer.draw());
         while (isRunning) {
             System.out.print("Enter command: ");
             String command = scanner.nextLine().trim();
@@ -53,11 +59,10 @@ public class NavigatorInteraction {
         }
     }
     private void handleDrawMap(){
-        //System.out.println(new GraphDrawer().draw());
+        System.out.println(graphDrawer.draw());
     }
 
     private void handleAddCity() {
-        CityConnectionServiceImpl cityConnectionService = new CityConnectionServiceImpl();
         Scanner scanner = new Scanner(System.in);
 
         List<City> cityList = cityService.findAll();
@@ -206,10 +211,9 @@ public class NavigatorInteraction {
 
         System.out.println("Cities selected: " + cityService.getById(cityId1).get().getTitle() + " and " + cityService.getById(cityId2).get().getTitle());
 
-        //GraphDrawer graphDrawer = new GraphDrawer();
         Route existingRoute = routeService.checkIfRouteExists(cityId1, cityId2);
         if (existingRoute != null) {
-            //System.out.println(graphDrawer.drawRoute(routeService.getCityConnectionsByRouteId(existingRoute.getId())));
+            System.out.println(graphDrawer.drawRoute(routeService.getCityConnectionsByRouteId(existingRoute.getId())));
             System.out.println("A route already exists between these two cities.");
             return;
         }
@@ -227,7 +231,7 @@ public class NavigatorInteraction {
 
         routeService.create(route);
         routeService.getCityConnectionsByRouteId(route.getId()).forEach(System.out::println);
-        //System.out.println(graphDrawer.drawRoute(routeService.getCityConnectionsByRouteId(route.getId())));
+        System.out.println(graphDrawer.drawRoute(routeService.getCityConnectionsByRouteId(route.getId())));
 
         System.out.println("Route added successfully!");
     }

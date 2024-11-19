@@ -1,8 +1,6 @@
 package org.example.service.observer;
 
 import org.example.model.City;
-import org.example.service.observer.CityEventType;
-import org.example.service.observer.Observer;
 
 public class CityLogger implements Observer {
 

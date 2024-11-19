@@ -1,8 +1,17 @@
 package org.example;
 
+import org.example.dao.CityMapper;
+import org.example.dao.implementation.CityConnectionMapperImpl;
+import org.example.dao.implementation.CityMapperImpl;
+import org.example.dao.implementation.RouteMapperImpl;
+import org.example.service.CityConnectionService;
+import org.example.service.CityService;
+import org.example.service.RouteService;
 import org.example.service.implementation.*;
 import org.example.service.observer.CityLogger;
 import org.example.service.observer.RouteLogger;
+import org.example.ui.GraphDrawer;
+import org.example.utils.implementation.CityNavigator;
 
 import java.util.Scanner;
 
@@ -20,13 +29,19 @@ public class Main {
         int choice = scanner.nextInt();
         scanner.nextLine();
 
-        CityServiceImpl cityService = new CityServiceImpl();
-        CityConnectionServiceImpl cityConnectionService = new CityConnectionServiceImpl();
-        RouteServiceImpl routeService = new RouteServiceImpl();
+        CityService cityService = new CityServiceImpl(new CityMapperImpl(), new CityConnectionServiceImpl(new CityConnectionMapperImpl()),new RouteCityServiceImpl());
+        CityConnectionService cityConnectionService = new CityConnectionServiceImpl(new CityConnectionMapperImpl());
+        RouteService routeService = new RouteServiceImpl(
+                new RouteMapperImpl(),
+                new StartLocationServiceImpl(),
+                new EndLocationServiceImpl(),
+                new RouteCityServiceImpl(),
+                new CityNavigator());
 
         CityLogger cityLogger = new CityLogger();
         RouteLogger routeLogger = new RouteLogger();
         cityService.addObserver(cityLogger);
+
         routeService.addObserver(routeLogger);
 
         switch (choice) {
@@ -45,7 +60,7 @@ public class Main {
             }
         }
 
-        NavigatorInteraction navigatorInteraction = new NavigatorInteraction(cityService, routeService);
+        NavigatorInteraction navigatorInteraction = new NavigatorInteraction(cityService, routeService,new GraphDrawer(cityConnectionService),cityConnectionService);
         navigatorInteraction.start();
     }
 }

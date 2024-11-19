@@ -1,7 +1,6 @@
 package org.example.service.implementation;
 
 import org.example.dao.CityConnectionMapper;
-import org.example.dao.implementation.CityConnectionMapperImpl;
 import org.example.model.CityConnection;
 import org.example.service.CityConnectionService;
 import org.example.utils.DistanceCalculator;
@@ -13,8 +12,10 @@ public class CityConnectionServiceImpl implements CityConnectionService {
 
     private final CityConnectionMapper cityConnectionMapper;
 
-    public CityConnectionServiceImpl() {
-        this.cityConnectionMapper = new CityConnectionMapperImpl();
+
+    public CityConnectionServiceImpl(CityConnectionMapper cityConnectionMapper) {
+
+        this.cityConnectionMapper = cityConnectionMapper;
     }
 
     @Override

@@ -2,14 +2,14 @@ package org.example;
 
 import org.example.model.City;
 import org.example.model.CityConnection;
-import org.example.service.implementation.CityConnectionServiceImpl;
-import org.example.service.implementation.CityServiceImpl;
+import org.example.service.CityConnectionService;
+import org.example.service.CityService;
 
 import java.util.*;
 
 public class CityGenerator {
 
-    public static void generateRandomCities(CityServiceImpl cityService, CityConnectionServiceImpl cityConnectionService) {
+    public static void generateRandomCities(CityService cityService, CityConnectionService cityConnectionService) {
         Random random = new Random();
         Set<String> uniqueTitles = new HashSet<>();
         List<City> cities = new ArrayList<>();
@@ -64,7 +64,7 @@ public class CityGenerator {
         return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     }
 
-    public static void createCity(CityServiceImpl cityService, CityConnectionServiceImpl cityConnectionService){
+    public static void createCity(CityService cityService, CityConnectionService cityConnectionService){
 
         City city1 = new City();
         city1.setTitle("A");

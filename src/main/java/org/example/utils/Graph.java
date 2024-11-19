@@ -31,4 +31,8 @@ public class Graph {
             end.addNeighbor(start, distance);
         }
     }
+
+    public Map<Long, Node> getNodes() {
+        return nodes;
+    }
 }

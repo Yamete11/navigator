@@ -30,4 +30,12 @@ public class Node {
     public boolean containsNeighbor(Long neighbor) {
         return neighbors.keySet().stream().map(Node::getId).noneMatch(neighbor::equals);
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Map<Node, Double> getNeighbors() {
+        return neighbors;
+    }
 }
