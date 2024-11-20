@@ -6,26 +6,53 @@ import org.example.service.CityConnectionService;
 
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class GraphDrawer {
 
-    GraphSet graphSet;
+    private final CityConnectionService cityConnectionService;
     private static final int MAP_HEIGHT = 80;
     private static final int MAP_WIDTH = 80;
 
     public GraphDrawer(CityConnectionService cityConnectionService) {
-        this.graphSet = new GraphSet(cityConnectionService);
+        this.cityConnectionService = cityConnectionService;
     }
 
     public String draw() {
         String[][] map = initializeMap();
-        drawCitiesAndConnections(map, graphSet);
+        drawCitiesAndConnections(map, getUniqueCityConnections());
         return buildMapString(map);
+    }
+
+    private List<CityConnection> getUniqueCityConnections() {
+        Set<CityConnection> uniqueCityConnections =
+                new TreeSet<>((c1, c2) -> {
+                    if (c1.getId().equals(c2.getId())) {
+                        return 0;
+                    }
+                    return c1.getId().compareTo(c2.getId());
+                });
+        uniqueCityConnections.addAll(cityConnectionService.findAll());
+        return uniqueCityConnections.stream().toList();
+    }
+
+    private Set<City> getUniqueCities(List<CityConnection> uniqueCityConnections) {
+        Set<City> uniqueCities = new TreeSet<>((c1, c2) -> {
+            if (c1.getId().equals(c2.getId())) {
+                return 0;
+            }
+            return c1.getId().compareTo(c2.getId());
+        });
+        for (CityConnection connection : uniqueCityConnections) {
+            uniqueCities.add(connection.getFirstCity());
+            uniqueCities.add(connection.getSecondCity());
+        }
+        return uniqueCities;
     }
 
     public String drawRoute(List<CityConnection> connections) {
         String[][] map = initializeMap();
-        drawCitiesAndConnections(map, new GraphSet(connections));
+        drawCitiesAndConnections(map, connections);
         return buildMapString(map);
     }
 
@@ -39,9 +66,8 @@ public class GraphDrawer {
         return map;
     }
 
-    private void drawCitiesAndConnections(String[][] map, GraphSet graphSet) {
-        Set<CityConnection> connections = graphSet.getUniqueCityConnections();
-        Set<City> cities = graphSet.getUniqueCity();
+    private void drawCitiesAndConnections(String[][] map, List<CityConnection> connections) {
+        Set<City> cities = getUniqueCities(connections);
 
         for (City city : cities) {
             int x = (int) ((city.getX() / 10) / 10 * (MAP_WIDTH - 1));
