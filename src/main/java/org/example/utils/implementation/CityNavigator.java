@@ -22,7 +22,7 @@ public class CityNavigator implements Navigator {
     private RouteFindingStrategy strategy;
 
     public CityNavigator() {
-        this.cityService = new CityServiceImpl(new CityMapperImpl(), new CityConnectionServiceImpl(new CityConnectionMapperImpl()),new RouteCityServiceImpl());
+        this.cityService = new CityServiceImpl(new CityMapperImpl(), new CityConnectionServiceImpl(new CityConnectionMapperImpl()), new RouteCityServiceImpl());
         this.cityConnectionService = new CityConnectionServiceImpl(new CityConnectionMapperImpl());
     }
 
@@ -38,10 +38,5 @@ public class CityNavigator implements Navigator {
         City start = cityService.getCityByTitle(firstCity).get();
         City end = cityService.getCityByTitle(secondCity).get();
         return strategy.findRoute(start, end);
-    }
-
-    @Override
-    public void setStrategy(RouteFindingStrategy strategy) {
-
     }
 }
