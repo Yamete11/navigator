@@ -101,6 +101,17 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
+    public void refresher() {
+        List<Route> routeList = routeMapper.findAll();
+        for (Route route : routeList) {
+            routeCityService.deleteByRouteId(route.getId());
+        }
+        for (Route route : routeList) {
+            routeMapper.update(route);
+        }
+    }
+
+    @Override
     public void addObserver(RouteObserver observer) {
         observers.add(observer);
     }

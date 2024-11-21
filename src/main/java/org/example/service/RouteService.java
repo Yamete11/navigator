@@ -11,5 +11,6 @@ public interface RouteService extends GenericService<Route>, RouteObservable {
 
     Route checkIfRouteExists(Long city1Id, Long city2Id);
     List<CityConnection> getCityConnectionsByRouteId(Long routeId);
+    void refresher();
 
 }
