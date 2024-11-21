@@ -45,13 +45,6 @@ public class CityServiceImpl implements CityService {
         try {
             cityMapper.create(city);
             notifyObservers(CityEventType.CITY_ADDED, city);
-            List<Route> routeList = getRouteService().findAll();
-            for (Route route : routeList) {
-                routeCityService.deleteByRouteId(route.getId());
-            }
-            for (Route route : routeList) {
-                getRouteService().update(route);
-            }
         } catch (IllegalArgumentException e) {
             throw new RuntimeException("Validation failed: " + e.getMessage(), e);
         }

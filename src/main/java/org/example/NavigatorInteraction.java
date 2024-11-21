@@ -147,6 +147,8 @@ public class NavigatorInteraction {
             cityConnectionService.create(connection1);
             cityConnectionService.create(connection2);
 
+            routeService.refresher();
+
             System.out.println("City successfully connected to cities with IDs " + firstCityId + " and " + secondCityId + ".");
         } catch (IllegalArgumentException e) {
             System.err.println("Error: " + e.getMessage());
