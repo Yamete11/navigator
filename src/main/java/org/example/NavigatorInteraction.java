@@ -110,62 +110,64 @@ public class NavigatorInteraction {
             return;
         }
 
-        try {
-            System.out.println("Choose two cities to connect the new city with:");
-
-            System.out.println("Available cities:");
-            for (City c : cityList) {
-                if (!c.getTitle().equals(city.getTitle())) {
-                    System.out.println(c.getId() + ": " + c.getTitle());
-                }
-            }
-
-            System.out.print("Enter the ID of the first city to connect: ");
-            long firstCityId = Integer.parseInt(scanner.nextLine().trim());
-            Optional<City> firstCity = cityService.getById(firstCityId);
-            if (firstCity.isEmpty()) {
-                throw new IllegalArgumentException("City with ID " + firstCityId + " does not exist.");
-            }
-
-            System.out.print("Enter the ID of the second city to connect: ");
-            long secondCityId = Integer.parseInt(scanner.nextLine().trim());
-
-            if (secondCityId == firstCityId) {
-                throw new IllegalArgumentException("You cannot select the same city twice");
-            }
-
-            Optional<City> secondCity = cityService.getById(secondCityId);
-            if (secondCity.isEmpty()) {
-                throw new IllegalArgumentException("City with ID " + secondCityId + " does not exist.");
-            }
-
-            CityConnection connection1 = new CityConnection();
-            connection1.setFirstCity(city);
-            connection1.setSecondCity(firstCity.get());
-            connection1.setDistance(0.0d);
-
-            CityConnection connection2 = new CityConnection();
-            connection2.setFirstCity(city);
-            connection2.setSecondCity(secondCity.get());
-            connection2.setDistance(0.0d);
-
-            cityConnectionService.create(connection1);
-            cityConnectionService.create(connection2);
-
-            routeService.refresher();
-
-            System.out.println("City successfully connected to cities with IDs " + firstCityId + " and " + secondCityId + ".");
-        } catch (IllegalArgumentException e) {
-            System.err.println("Error: " + e.getMessage());
+        if (cityService.findAll().size() >= 3) {
             try {
-                System.out.println("Rolling back city creation...");
-                cityService.deleteById(city.getId());
-                System.out.println("City removed successfully.");
-            } catch (Exception rollbackException) {
-                System.err.println("Error during rollback: " + rollbackException.getMessage());
+                System.out.println("Choose two cities to connect the new city with:");
+
+                System.out.println("Available cities:");
+                for (City c : cityList) {
+                    if (!c.getTitle().equals(city.getTitle())) {
+                        System.out.println(c.getId() + ": " + c.getTitle());
+                    }
+                }
+
+                System.out.print("Enter the ID of the first city to connect: ");
+                long firstCityId = Integer.parseInt(scanner.nextLine().trim());
+                Optional<City> firstCity = cityService.getById(firstCityId);
+                if (firstCity.isEmpty()) {
+                    throw new IllegalArgumentException("City with ID " + firstCityId + " does not exist.");
+                }
+
+                System.out.print("Enter the ID of the second city to connect: ");
+                long secondCityId = Integer.parseInt(scanner.nextLine().trim());
+
+                if (secondCityId == firstCityId) {
+                    throw new IllegalArgumentException("You cannot select the same city twice");
+                }
+
+                Optional<City> secondCity = cityService.getById(secondCityId);
+                if (secondCity.isEmpty()) {
+                    throw new IllegalArgumentException("City with ID " + secondCityId + " does not exist.");
+                }
+
+                CityConnection connection1 = new CityConnection();
+                connection1.setFirstCity(city);
+                connection1.setSecondCity(firstCity.get());
+                connection1.setDistance(0.0d);
+
+                CityConnection connection2 = new CityConnection();
+                connection2.setFirstCity(city);
+                connection2.setSecondCity(secondCity.get());
+                connection2.setDistance(0.0d);
+
+                cityConnectionService.create(connection1);
+                cityConnectionService.create(connection2);
+
+                routeService.refresher();
+
+                System.out.println("City successfully connected to cities with IDs " + firstCityId + " and " + secondCityId + ".");
+            } catch (IllegalArgumentException e) {
+                System.err.println("Error: " + e.getMessage());
+                try {
+                    System.out.println("Rolling back city creation...");
+                    cityService.deleteById(city.getId());
+                    System.out.println("City removed successfully.");
+                } catch (Exception rollbackException) {
+                    System.err.println("Error during rollback: " + rollbackException.getMessage());
+                }
+            } catch (Exception e) {
+                System.err.println("Unexpected error occurred: " + e.getMessage());
             }
-        } catch (Exception e) {
-            System.err.println("Unexpected error occurred: " + e.getMessage());
         }
     }
 
