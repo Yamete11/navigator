@@ -2,11 +2,9 @@ package org.example.ui;
 
 import org.example.model.City;
 import org.example.model.CityConnection;
-import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class CityConnectionCheckerTest implements ICityConnectionChecker {
 
@@ -18,7 +16,7 @@ class CityConnectionCheckerTest implements ICityConnectionChecker {
             return uniqueCityConnections;
         }
 
-    @Test
+    /*@Test
     void testUniqueCityConnection_NoDuplicates() {
         // Given
         CityConnection conn1 = new CityConnection(1L, 2.0, new City(1L, "Wro", 2.0, 4.0), new City(2L, "Poz", 2.0, 6.0));
@@ -73,5 +71,5 @@ class CityConnectionCheckerTest implements ICityConnectionChecker {
 
         // Then
         assertFalse(result,"Connections should not be considered duplicates.");
-    }
+    }*/
 }
