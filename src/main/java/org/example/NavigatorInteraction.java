@@ -129,6 +129,11 @@ public class NavigatorInteraction {
 
             System.out.print("Enter the ID of the second city to connect: ");
             long secondCityId = Integer.parseInt(scanner.nextLine().trim());
+
+            if (secondCityId == firstCityId) {
+                throw new IllegalArgumentException("You cannot select the same city twice");
+            }
+
             Optional<City> secondCity = cityService.getById(secondCityId);
             if (secondCity.isEmpty()) {
                 throw new IllegalArgumentException("City with ID " + secondCityId + " does not exist.");
