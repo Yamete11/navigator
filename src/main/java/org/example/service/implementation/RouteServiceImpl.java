@@ -107,7 +107,7 @@ public class RouteServiceImpl implements RouteService {
             routeCityService.deleteByRouteId(route.getId());
         }
         for (Route route : routeList) {
-            routeMapper.update(route);
+            this.update(route);
         }
     }
 

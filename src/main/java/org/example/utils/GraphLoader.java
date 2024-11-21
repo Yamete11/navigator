@@ -17,10 +17,12 @@ import java.util.Objects;
 public class GraphLoader {
     @Getter
     private static final Graph graph = new Graph();
+    private static CityService cityService;
+    private static CityConnectionService cityConnectionService;
 
     static {
-        CityService cityService = new CityServiceImpl(new CityMapperImpl(), new CityConnectionServiceImpl(new CityConnectionMapperImpl()),new RouteCityServiceImpl());
-        CityConnectionService cityConnectionService = new CityConnectionServiceImpl(new CityConnectionMapperImpl());
+        cityService = new CityServiceImpl(new CityMapperImpl(), new CityConnectionServiceImpl(new CityConnectionMapperImpl()),new RouteCityServiceImpl());
+        cityConnectionService = new CityConnectionServiceImpl(new CityConnectionMapperImpl());
         loadGraph(cityService, cityConnectionService);
     }
 
@@ -38,6 +40,7 @@ public class GraphLoader {
     }
 
     public static Graph getGraph() {
+        loadGraph(cityService, cityConnectionService);
         return graph;
     }
 }

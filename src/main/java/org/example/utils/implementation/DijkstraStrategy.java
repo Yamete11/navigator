@@ -13,7 +13,7 @@ import org.example.utils.*;
 import java.util.*;
 
 public class DijkstraStrategy implements RouteFindingStrategy {
-    private final Graph graph;
+    private Graph graph;
     private final Navigator navigator;
     private final CityService cityService;
 
