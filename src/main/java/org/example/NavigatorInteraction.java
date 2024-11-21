@@ -124,16 +124,14 @@ public class NavigatorInteraction {
             long firstCityId = Integer.parseInt(scanner.nextLine().trim());
             Optional<City> firstCity = cityService.getById(firstCityId);
             if (firstCity.isEmpty()) {
-                System.err.println("City with ID " + firstCityId + " does not exist.");
-                return;
+                throw new IllegalArgumentException("City with ID " + firstCityId + " does not exist.");
             }
 
             System.out.print("Enter the ID of the second city to connect: ");
             long secondCityId = Integer.parseInt(scanner.nextLine().trim());
             Optional<City> secondCity = cityService.getById(secondCityId);
             if (secondCity.isEmpty()) {
-                System.err.println("City with ID " + secondCityId + " does not exist.");
-                return;
+                throw new IllegalArgumentException("City with ID " + secondCityId + " does not exist.");
             }
 
             CityConnection connection1 = new CityConnection();
@@ -146,13 +144,12 @@ public class NavigatorInteraction {
             connection2.setSecondCity(secondCity.get());
             connection2.setDistance(0.0d);
 
-
             cityConnectionService.create(connection1);
             cityConnectionService.create(connection2);
 
             System.out.println("City successfully connected to cities with IDs " + firstCityId + " and " + secondCityId + ".");
-        } catch (Exception e) {
-            System.err.println("Error occurred: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.err.println("Error: " + e.getMessage());
             try {
                 System.out.println("Rolling back city creation...");
                 cityService.deleteById(city.getId());
@@ -160,11 +157,18 @@ public class NavigatorInteraction {
             } catch (Exception rollbackException) {
                 System.err.println("Error during rollback: " + rollbackException.getMessage());
             }
+        } catch (Exception e) {
+            System.err.println("Unexpected error occurred: " + e.getMessage());
         }
     }
 
     private void handleAddRoute() {
         List<City> cityList = cityService.findAll();
+
+        if (cityList.isEmpty()) {
+            System.out.println("No cities available to create a route");
+            return;
+        }
 
         System.out.println("List of cities:");
         for (City city : cityList) {
